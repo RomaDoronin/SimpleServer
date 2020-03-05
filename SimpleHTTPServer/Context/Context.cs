@@ -85,7 +85,13 @@ namespace SimpleHTTPServer
         {
             reqData = new Dictionary<string, string>();
 
-            while (REQ_DATA_START != GetNextWordWithDelete(ref request)) { }
+            while (REQ_DATA_START != GetNextWordWithDelete(ref request))
+            {
+                if (0 == request.Length)
+                {
+                    return;
+                }
+            }
             string key;
             while (REQ_DATA_END != (key = GetNextWordWithDelete(ref request)))
             {

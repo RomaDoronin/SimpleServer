@@ -33,7 +33,7 @@ namespace SimpleHTTPServer.HTTPInteraction
             if (context.httpReqName == "POST")
             {
                 string jsonResponse = "{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\"\n}";
-                string Headers = "HTTP/1.1 200 OK\nContent-Type: " + context.contentType + "\nContent-Length: " + context.contentLength + "\n\n" + jsonResponse;
+                string Headers = "HTTP/1.1 200 OK\nContent-Type: " + context.contentType + "\nContent-Length: " + jsonResponse.Length + "\n\n" + jsonResponse;
                 byte[] HeadersBuffer = Encoding.ASCII.GetBytes(Headers);
                 client.GetStream().Write(HeadersBuffer, 0, HeadersBuffer.Length);
             }
