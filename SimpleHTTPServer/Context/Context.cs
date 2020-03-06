@@ -10,82 +10,41 @@ namespace SimpleHTTPServer
         private const string REQ_DATA_START = "{";
         private const string REQ_DATA_END = "}";
 
-        public string httpReqName;
-        public string contentType;
-        public string host;
-        public int contentLength;
-        public Dictionary<string, string> reqData;
-        public bool isError;
+        private bool isError;
 
-        private string GetNextWordWithDelete(ref string str)
-        {
-            string word = "";
-            string newStr = "";
-            bool wordFound = false;
+        public ContextRequest contextRequest;
+        public ContextResponse contextResponse;
 
-            foreach (char ch in str)
-            {
-                if (!wordFound)
-                {
-                    if (ch == ' ' || ch == '\r' || ch == '\n')
-                    {
-                        if (word.Length > 0)
-                        {
-                            wordFound = true;
-                        }
-                        continue;
-                    }
-                    word += ch;
-                }
-                else
-                {
-                    newStr += ch;
-                }
-            }
-
-            str = newStr;
-            return word;
-        }
+        public bool IsError { get => isError; }
 
         private void GetHttpReqName(ref string request)
         {
-            httpReqName = GetNextWordWithDelete(ref request);
+            httpReqName = StrManualLib.GetNextWordWithDelete(ref request);
         }
 
         private void GetContentType(ref string request)
         {
-            while (KEY_CONTENT_TYPE != GetNextWordWithDelete(ref request)) { }
-            contentType = GetNextWordWithDelete(ref request);
+            while (KEY_CONTENT_TYPE != StrManualLib.GetNextWordWithDelete(ref request)) { }
+            contentType = StrManualLib.GetNextWordWithDelete(ref request);
         }
 
         private void GetHost(ref string request)
         {
-            while (KEY_HOST != GetNextWordWithDelete(ref request)) { }
-            host = GetNextWordWithDelete(ref request);
+            while (KEY_HOST != StrManualLib.GetNextWordWithDelete(ref request)) { }
+            host = StrManualLib.GetNextWordWithDelete(ref request);
         }
 
         private void GetContentLength(ref string request)
         {
-            while (KEY_CONTENT_LENGTH != GetNextWordWithDelete(ref request)) { }
-            contentLength = int.Parse(GetNextWordWithDelete(ref request));
-        }
-
-        private string RemoveSpecialSymbol(string str)
-        {
-            str = str.Remove(0, 1);
-            if (str[str.Length - 1] != '"')
-            {
-                str = str.Remove(str.Length - 1, 1);
-            }
-
-            return str.Remove(str.Length - 1, 1);
+            while (KEY_CONTENT_LENGTH != StrManualLib.GetNextWordWithDelete(ref request)) { }
+            contentLength = int.Parse(StrManualLib.GetNextWordWithDelete(ref request));
         }
 
         private void GetReqData(ref string request)
         {
             reqData = new Dictionary<string, string>();
 
-            while (REQ_DATA_START != GetNextWordWithDelete(ref request))
+            while (REQ_DATA_START != StrManualLib.GetNextWordWithDelete(ref request))
             {
                 if (0 == request.Length)
                 {
@@ -93,9 +52,9 @@ namespace SimpleHTTPServer
                 }
             }
             string key;
-            while (REQ_DATA_END != (key = GetNextWordWithDelete(ref request)))
+            while (REQ_DATA_END != (key = StrManualLib.GetNextWordWithDelete(ref request)))
             {
-                string value = RemoveSpecialSymbol(GetNextWordWithDelete(ref request));
+                string value = RemoveSpecialSymbol(StrManualLib.GetNextWordWithDelete(ref request));
                 key = RemoveSpecialSymbol(key);
                 reqData.Add(key, value);
             }
@@ -125,6 +84,9 @@ namespace SimpleHTTPServer
 
         public Context(string request)
         {
+            contextRequest = new ContextRequest();
+            contextResponse = new ContextResponse();
+
             GetHttpReqName(ref request);
             GetContentType(ref request);
             GetHost(ref request);
