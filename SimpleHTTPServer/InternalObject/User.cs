@@ -8,6 +8,7 @@ namespace SimpleHTTPServer.InternalObject
 {
     class User
     {
+        public string accountId;
         public string firstname;
         public string secondname;
         public string username;

@@ -6,10 +6,11 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.InternalObject
 {
-    class PetMedicalCard
+    class Patient
     {
-        public string petMedicalCardId;
-        public string name;
-        public string disease;
+        string patientId;
+        string firstname;
+        string secondname;
+        string petMedicalCardId;
     }
 }
