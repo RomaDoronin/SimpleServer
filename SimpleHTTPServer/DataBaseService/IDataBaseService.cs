@@ -9,13 +9,81 @@ namespace SimpleHTTPServer.DataBaseService
     enum DatabaseStatus
     {
         DB_OK,
-        DB_USER_NOT_ALLOWED
+        DB_OBJECT_NOT_FOUND
+    }
+
+    struct DatabaseReturn
+    {
+        public DatabaseStatus status;
+        public Object internalObject;
     }
 
     interface IDataBaseService
     {
-        DatabaseStatus CreateUser(InternalObject.User user);
-        DatabaseStatus ChangeUser(InternalObject.User user);
-        DatabaseStatus AddPetMedicalCardToUser(InternalObject.PetMedicalCard petMedicalCard, InternalObject.User user);
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: null
+        /// }
+        /// </summary>
+        DatabaseReturn CreateUser(InternalObject.User user);
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: null
+        /// }
+        /// </summary>
+        DatabaseReturn ChangeUser(InternalObject.User user);
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: User
+        /// }
+        /// </summary>
+        DatabaseReturn GetUser();
+
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: null
+        /// }
+        /// </summary>
+        DatabaseReturn CreatePatient(InternalObject.Patient patient);
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: [Patient]
+        /// }
+        /// </summary>
+        DatabaseReturn GetAllPatients();
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: Patient
+        /// }
+        /// </summary>
+        DatabaseReturn GetPatient(InternalObject.Patient patient);
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: null
+        /// }
+        /// </summary>
+        DatabaseReturn SetPetMedicalCardToPatient(string patientId, InternalObject.PetMedicalCard petMedicalCard);
+
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: null
+        /// }
+        /// </summary>
+        DatabaseReturn CreatePetMedicalCard(InternalObject.PetMedicalCard petMedicalCard);
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: PetMedicalCard
+        /// }
+        /// </summary>
+        DatabaseReturn GetPetMedicalCard(InternalObject.PetMedicalCard petMedicalCard);
     }
 }
