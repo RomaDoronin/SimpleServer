@@ -1,4 +1,5 @@
-﻿using SimpleHTTPServer.HTTPInteraction;
+﻿using System;
+using SimpleHTTPServer.HTTPInteraction;
 
 namespace SimpleHTTPServer
 {
