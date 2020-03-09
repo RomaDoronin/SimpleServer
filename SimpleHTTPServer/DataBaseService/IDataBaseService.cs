@@ -9,7 +9,8 @@ namespace SimpleHTTPServer.DataBaseService
     enum DatabaseStatus
     {
         DB_OK,
-        DB_OBJECT_NOT_FOUND
+        DB_OBJECT_NOT_FOUND,
+        DB_UNKNOWN_ERROR
     }
 
     struct DatabaseReturn
@@ -41,6 +42,13 @@ namespace SimpleHTTPServer.DataBaseService
         /// }
         /// </summary>
         DatabaseReturn GetUser();
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
+        /// internalObject: [User with one field "key"]
+        /// }
+        /// </summary>
+        DatabaseReturn GetAllUser(string key);
 
         /// <summary>
         /// Return {

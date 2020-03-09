@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace SimpleHTTPServer
 {
@@ -12,34 +13,38 @@ namespace SimpleHTTPServer
 
         public ContextRequest contextRequest;
         public ContextResponse contextResponse;
+        public DataBaseService.IDataBaseService dataBase; // TODO: Проиницилизировать
 
         private void GetHttpReqName(ref string request)
         {
-            httpReqName = StrManualLib.GetNextWordWithDelete(ref request);
+            contextRequest.httpReqName = StrManualLib.GetNextWordWithDelete(ref request);
+        }
+
+        private void GetURL(ref string request)
+        {
+            contextRequest.url = StrManualLib.GetNextWordWithDelete(ref request);
         }
 
         private void GetContentType(ref string request)
         {
             while (KEY_CONTENT_TYPE != StrManualLib.GetNextWordWithDelete(ref request)) { }
-            contentType = StrManualLib.GetNextWordWithDelete(ref request);
+            contextRequest.contentType = StrManualLib.GetNextWordWithDelete(ref request);
         }
 
         private void GetHost(ref string request)
         {
             while (KEY_HOST != StrManualLib.GetNextWordWithDelete(ref request)) { }
-            host = StrManualLib.GetNextWordWithDelete(ref request);
+            contextRequest.host = StrManualLib.GetNextWordWithDelete(ref request);
         }
 
         private void GetContentLength(ref string request)
         {
             while (KEY_CONTENT_LENGTH != StrManualLib.GetNextWordWithDelete(ref request)) { }
-            contentLength = int.Parse(StrManualLib.GetNextWordWithDelete(ref request));
+            contextRequest.contentLength = int.Parse(StrManualLib.GetNextWordWithDelete(ref request));
         }
 
         private void GetReqData(ref string request)
         {
-            reqData = new Dictionary<string, string>();
-
             while (REQ_DATA_START != StrManualLib.GetNextWordWithDelete(ref request))
             {
                 if (0 == request.Length)
@@ -50,17 +55,15 @@ namespace SimpleHTTPServer
             string key;
             while (REQ_DATA_END != (key = StrManualLib.GetNextWordWithDelete(ref request)))
             {
-                string value = RemoveSpecialSymbol(StrManualLib.GetNextWordWithDelete(ref request));
-                key = RemoveSpecialSymbol(key);
-                reqData.Add(key, value);
+                string value = StrManualLib.RemoveSpecialSymbol(StrManualLib.GetNextWordWithDelete(ref request));
+                key = StrManualLib.RemoveSpecialSymbol(key);
+                contextRequest.reqData.data.Add(key, value);
             }
         }
 
         private void CheckForErrors()
         {
-            isError = false;
-
-            switch (httpReqName)
+            switch (contextRequest.httpReqName)
             {
                 case "GET":
                     break;
@@ -73,7 +76,7 @@ namespace SimpleHTTPServer
                 case "PATCH":
                     break;
                 default:
-                    isError = true;
+                    contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
                     break;
             }
         }
@@ -84,6 +87,7 @@ namespace SimpleHTTPServer
             contextResponse = new ContextResponse();
 
             GetHttpReqName(ref request);
+            GetURL(ref request);
             GetContentType(ref request);
             GetHost(ref request);
             GetContentLength(ref request);

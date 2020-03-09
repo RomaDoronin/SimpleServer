@@ -9,7 +9,7 @@ namespace SimpleHTTPServer
     class ContextResponse
     {
         public string httpVersion;
-        public int statusCode;
+        public Constants.StatusCode statusCode;
         public string contentType;
         public int contentLength;
         public JSON respData;
@@ -17,7 +17,7 @@ namespace SimpleHTTPServer
         public ContextResponse()
         {
             httpVersion = string.Empty;
-            statusCode = 200;
+            statusCode = Constants.StatusCode.OK;
             contentType = string.Empty;
             contentLength = 0;
             respData = new JSON("{\n}");
