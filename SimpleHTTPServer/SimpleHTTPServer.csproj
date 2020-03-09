@@ -51,6 +51,7 @@
     <Compile Include="Context\ContextResponse.cs" />
     <Compile Include="Context\JSON.cs" />
     <Compile Include="DataBaseService\IDataBaseService.cs" />
+    <Compile Include="DataBaseService\RunTimeDataBaseMock.cs" />
     <Compile Include="HTTPInteraction\Client.cs" />
     <Compile Include="HTTPInteraction\Server.cs" />
     <Compile Include="InternalObject\Patient.cs" />

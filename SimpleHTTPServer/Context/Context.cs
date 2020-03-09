@@ -13,7 +13,7 @@ namespace SimpleHTTPServer
 
         public ContextRequest contextRequest;
         public ContextResponse contextResponse;
-        public DataBaseService.IDataBaseService dataBase; // TODO: Проиницилизировать
+        public DataBaseService.IDataBaseService dataBase;
 
         private void GetHttpReqName(ref string request)
         {
@@ -85,6 +85,7 @@ namespace SimpleHTTPServer
         {
             contextRequest = new ContextRequest();
             contextResponse = new ContextResponse();
+            dataBase = DataBaseService.RunTimeDataBaseMock.Inst();
 
             GetHttpReqName(ref request);
             GetURL(ref request);
