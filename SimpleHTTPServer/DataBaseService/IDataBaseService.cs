@@ -17,6 +17,12 @@ namespace SimpleHTTPServer.DataBaseService
     {
         public DatabaseStatus status;
         public Object internalObject;
+
+        public DatabaseReturn(DatabaseStatus status, Object internalObject)
+        {
+            this.status = status;
+            this.internalObject = internalObject;
+        }
     }
 
     interface IDataBaseService
