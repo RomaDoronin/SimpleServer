@@ -8,6 +8,8 @@ namespace SimpleHTTPServer
 {
     public class StrManualLib
     {
+        private static Random random = new Random();
+
         public static string GetNextWordWithDelete(ref string str)
         {
             string word = "";
@@ -47,6 +49,13 @@ namespace SimpleHTTPServer
             }
 
             return str.Remove(str.Length - 1, 1);
+        }
+
+        public static string GenerateRandomString(int length)
+        {
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
+            return new string(Enumerable.Repeat(chars, length)
+              .Select(s => s[random.Next(s.Length)]).ToArray());
         }
     }
 }
