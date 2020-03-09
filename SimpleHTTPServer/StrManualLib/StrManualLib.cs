@@ -16,7 +16,7 @@ namespace SimpleHTTPServer
             string newStr = "";
             bool wordFound = false;
 
-            foreach (char ch in str)
+            foreach (var ch in str)
             {
                 if (!wordFound)
                 {

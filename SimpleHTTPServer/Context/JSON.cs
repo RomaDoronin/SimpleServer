@@ -43,7 +43,7 @@ namespace SimpleHTTPServer
         public override string ToString()
         {
             string strData = "{";
-            foreach (string key in data.Keys)
+            foreach (var key in data.Keys)
             {
                 if (strData.Length > 1)
                 {

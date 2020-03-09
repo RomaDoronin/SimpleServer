@@ -34,7 +34,7 @@ namespace SimpleHTTPServer.Modules
         {
             string[] fieldNames = { "firstname", "secondname", "username", "hash_password" };
 
-            foreach (string fieldName in fieldNames)
+            foreach (var fieldName in fieldNames)
             {
                 ValidatePOSTFieldExistAndNotEmpty(context, fieldName);
             }
@@ -70,8 +70,8 @@ namespace SimpleHTTPServer.Modules
                 return;
             }
 
-            List<InternalObject.User> userList = (List<InternalObject.User>)databaseReturn.internalObject;
-            foreach (InternalObject.User user in userList)
+            var userList = (List<InternalObject.User>)databaseReturn.internalObject;
+            foreach (var user in userList)
             {
                 if (user.username == context.contextRequest.reqData.data["username"])
                 {
