@@ -10,12 +10,8 @@ namespace SimpleHTTPServer
         private const string REQ_DATA_START = "{";
         private const string REQ_DATA_END = "}";
 
-        private bool isError;
-
         public ContextRequest contextRequest;
         public ContextResponse contextResponse;
-
-        public bool IsError { get => isError; }
 
         private void GetHttpReqName(ref string request)
         {
