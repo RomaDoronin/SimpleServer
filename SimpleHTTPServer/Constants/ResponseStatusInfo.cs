@@ -17,6 +17,7 @@ namespace SimpleHTTPServer.Constants
         NOT_FOUND = 404,
         METHOD_NOT_ALLOWED = 405,
         CONFLICT = 409,
+        UNSUPPORTED_MEDIA_TYPE = 415,
 
         INTERNAL_SERVER_ERROR = 500
     }
@@ -25,10 +26,14 @@ namespace SimpleHTTPServer.Constants
     {
         METHOD_NOT_ALLOWED,
         INCORRECT_COMPANY_PREFIX,
+        INCORRECT_MODULE_NAME,
         REQUIRED_FIELD_MISSING,
         EMPTY_FIELD_VALUE_PRESENT,
         PROBLEM_WITH_ACCESS_DATABASE,
-        USERNAME_ALREADY_EXIST
+        USERNAME_ALREADY_EXIST,
+        SUPPORTED_ONLY_JSON,
+        INCORRECT_JSON_FORMAT,
+        IDENTICAL_KEYS_ON_SAME_LEVEL
     }
 
     class ResponseStatusInfo
@@ -37,10 +42,14 @@ namespace SimpleHTTPServer.Constants
         {
             {ErrorMessageKey.METHOD_NOT_ALLOWED, "Method not allowed"},
             {ErrorMessageKey.INCORRECT_COMPANY_PREFIX, "Incorrect company prefix"},
+            {ErrorMessageKey.INCORRECT_MODULE_NAME, "Incorrect module name"},
             {ErrorMessageKey.REQUIRED_FIELD_MISSING, "Required field is missing"},
             {ErrorMessageKey.EMPTY_FIELD_VALUE_PRESENT, "An empty field value is present"},
             {ErrorMessageKey.PROBLEM_WITH_ACCESS_DATABASE, "The problem with the access database"},
-            {ErrorMessageKey.USERNAME_ALREADY_EXIST, "A user with this username already exists"}
+            {ErrorMessageKey.USERNAME_ALREADY_EXIST, "A user with this username already exists"},
+            {ErrorMessageKey.SUPPORTED_ONLY_JSON, "The server only supports type: application/json"},
+            {ErrorMessageKey.INCORRECT_JSON_FORMAT, "Incorrect JSON format"},
+            {ErrorMessageKey.IDENTICAL_KEYS_ON_SAME_LEVEL, "Two identical keys on the same level"}
         };
 
         public static string GetErrorMessage(ErrorMessageKey key)

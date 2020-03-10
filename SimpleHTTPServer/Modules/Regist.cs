@@ -26,6 +26,7 @@ namespace SimpleHTTPServer.Modules
         {
             // Проверка что все поля есть и заполнены
             ValidatePOSTFieldExistAndNotEmpty(context);
+            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { return; }
 
             // Проверка на неповторяющийся username
             ValidatePOSTNonRepeatingUsername(context);
@@ -38,6 +39,7 @@ namespace SimpleHTTPServer.Modules
             foreach (var fieldName in fieldNames)
             {
                 ValidatePOSTFieldExistAndNotEmpty(context, fieldName);
+                if (context.contextResponse.statusCode != Constants.StatusCode.OK) { return; }
             }
         }
 

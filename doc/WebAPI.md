@@ -7,7 +7,6 @@ curl -v X POST \
     -H "Content-Type: application/json" \
     -d '{"firstname":"Roman","secondname":"Doronin","username":"rdoronin","hash_password":"#9jfg3ksg34jh34g9$4geeg54zm"}' \
 {
-    "status": "success",
     "message": "ok"
 }
 ```
@@ -29,7 +28,6 @@ curl -v X PUT \
     "data": {
         "account_id": "kg9254p94q3p43cf4cfp4fjq38"
     }
-    "status": "success",
     "message": "ok"
 }
 ```
@@ -48,7 +46,6 @@ curl -v X POST \
     -H "Content-Type: application/json" \
     -d '{"firstname":"Patient67","secondname":"Ivanov"}' \
 {
-    "status": "success",
     "message": "ok"
 }
 ```
@@ -77,7 +74,6 @@ curl -v X GET \
              }
         ]
     }
-    "status": "success",
     "message": "ok"
 }
 ```
@@ -95,7 +91,6 @@ curl -v X GET \
         "secondname": "Ivanov",
         "pet_id": "{PET_ID}"
     }
-    "status": "success",
     "message": "ok"
 }
 ```
@@ -112,7 +107,6 @@ curl -v X PATCH \
     -H "Content-Type: application/json" \
     -d '{"pet_medical_card_id":"{PET_MEDICAL_CARD_ID}"}' \
 {
-    "status": "success",
     "message": "ok"
 }
 ```
@@ -131,7 +125,6 @@ curl -v X POST \
     -H "Content-Type: application/json" \
     -d '{"name":"Salem","disease":"Cold"}' \
 {
-    "status": "success",
     "message": "ok"
 }
 ```
@@ -148,7 +141,6 @@ curl -v X GET \
         "name": "Salem",
         "disease": "Cold"
     }
-    "status": "success",
     "message": "ok"
 }
 ```

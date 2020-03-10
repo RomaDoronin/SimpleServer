@@ -10,6 +10,10 @@ namespace SimpleHTTPServer
     {
         private static Random random = new Random();
 
+        /// <summary>
+        /// 'str': "Input our string" -> "our string",
+        /// return: "Input"
+        /// </summary>
         public static string GetNextWordWithDelete(ref string str)
         {
             string word = "";
@@ -40,6 +44,9 @@ namespace SimpleHTTPServer
             return word;
         }
 
+        /// <summary>
+        /// "\"Input\"," -> "Input"
+        /// </summary>
         public static string RemoveSpecialSymbol(string str)
         {
             str = str.Remove(0, 1);
