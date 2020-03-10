@@ -76,7 +76,8 @@ namespace SimpleHTTPServer
                 case "PATCH":
                     break;
                 default:
-                    contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
+                    contextResponse.statusCode = Constants.StatusCode.METHOD_NOT_ALLOWED;
+                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.METHOD_NOT_ALLOWED);
                     break;
             }
         }

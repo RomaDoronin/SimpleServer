@@ -10,16 +10,16 @@ namespace SimpleHTTPServer
     {
         public string httpVersion;
         public Constants.StatusCode statusCode;
+        public string message;
         public string contentType;
-        public int contentLength;
         public JSON respData;
 
         public ContextResponse()
         {
             httpVersion = string.Empty;
             statusCode = Constants.StatusCode.OK;
+            message = string.Empty;
             contentType = string.Empty;
-            contentLength = 0;
             respData = new JSON("{\n}");
         }
     }

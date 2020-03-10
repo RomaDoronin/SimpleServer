@@ -17,6 +17,7 @@ namespace SimpleHTTPServer.Modules
                     break;
                 default:
                     context.contextResponse.statusCode = Constants.StatusCode.METHOD_NOT_ALLOWED;
+                    context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.METHOD_NOT_ALLOWED);
                     break;
             }
         }
@@ -49,6 +50,7 @@ namespace SimpleHTTPServer.Modules
             else
             {
                 context.contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
+                context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.REQUIRED_FIELD_MISSING);
             }
         }
 
@@ -57,6 +59,7 @@ namespace SimpleHTTPServer.Modules
             if (valueLength == 0)
             {
                 context.contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
+                context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.EMPTY_FIELD_VALUE_PRESENT);
             }
         }
 
@@ -67,6 +70,7 @@ namespace SimpleHTTPServer.Modules
             if (databaseReturn.status != DataBaseService.DatabaseStatus.DB_OK)
             {
                 context.contextResponse.statusCode = Constants.StatusCode.INTERNAL_SERVER_ERROR;
+                context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.PROBLEM_WITH_ACCESS_DATABASE);
                 return;
             }
 
@@ -76,6 +80,7 @@ namespace SimpleHTTPServer.Modules
                 if (user.username == context.contextRequest.reqData.data["username"])
                 {
                     context.contextResponse.statusCode = Constants.StatusCode.CONFLICT;
+                    context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.USERNAME_ALREADY_EXIST);
                     return;
                 }
             }
@@ -107,6 +112,7 @@ namespace SimpleHTTPServer.Modules
             if (context.dataBase.CreateUser(user).status != DataBaseService.DatabaseStatus.DB_OK)
             {
                 context.contextResponse.statusCode = Constants.StatusCode.INTERNAL_SERVER_ERROR;
+                context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.PROBLEM_WITH_ACCESS_DATABASE);
                 return;
             }
         }

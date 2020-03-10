@@ -53,9 +53,22 @@ namespace SimpleHTTPServer
 
         public static string GenerateRandomString(int length)
         {
-            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789";
-            return new string(Enumerable.Repeat(chars, length)
-              .Select(s => s[random.Next(s.Length)]).ToArray());
+            const string chars = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789";
+            return new string(Enumerable.Repeat(chars, length).Select(s => s[random.Next(s.Length)]).ToArray());
+        }
+
+        /// <summary>
+        /// "METHOD_NOT_ALLOWED" -> "Method not allowed"
+        /// </summary>
+        public static string ConstFormatToStringFormat(string str)
+        {
+            str = str.Replace('_', ' ');
+            char firstLetter = str[0];
+            str = str.Substring(1);
+            str = str.ToLower();
+            str = firstLetter + str;
+
+            return str;
         }
     }
 }

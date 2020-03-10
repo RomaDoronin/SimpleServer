@@ -44,7 +44,7 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\ModuleList.cs" />
-    <Compile Include="Constants\StatusCode.cs" />
+    <Compile Include="Constants\ResponseStatusInfo.cs" />
     <Compile Include="Constants\UrlPositionNumber.cs" />
     <Compile Include="Context\Context.cs" />
     <Compile Include="Context\ContextRequest.cs" />

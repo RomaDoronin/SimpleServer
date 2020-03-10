@@ -26,37 +26,52 @@ namespace SimpleHTTPServer.HTTPInteraction
             Context context = new Context(request);
 
             // Если запрос не удался
-            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendError(client, context.contextResponse.statusCode); return; }
+            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendResponse(client, context); return; }
 
             CheckCompanyPrefix(context);
-            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendError(client, context.contextResponse.statusCode); return; }
+            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendResponse(client, context); return; }
             IModule module = GetModule(context);
-            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendError(client, context.contextResponse.statusCode); return; }
+            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendResponse(client, context); return; }
 
             module.Validate(context);
-            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendError(client, context.contextResponse.statusCode); return; }
+            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendResponse(client, context); return; }
             module.ProcessRequest(context);
-            if (context.contextResponse.statusCode != Constants.StatusCode.OK) { SendError(client, context.contextResponse.statusCode); return; }
 
-            // Формируем response
-            string statusKey = "status";
+            // Отправляем ответ
+            SendResponse(client, context);
+        }
+
+        private string PrepareResponse(Context context)
+        {
             string statusValue = "success";
-            string messageKey = "message";
             string messageValue = "ok";
+            if (context.contextResponse.statusCode != Constants.StatusCode.OK)
+            {
+                statusValue = "error";
+                messageValue = context.contextResponse.message;
+            }
 
-            string jsonResponse = string.Format("\n    \"{0}\": \"{1}\",\n    \"{2}\": \"{3}\"\n",
-                statusKey, statusValue, messageKey, messageValue);
+            string jsonResponse = string.Format("\n    \"status\": \"{0}\",\n    \"message\": \"{1}\"\n", statusValue, messageValue);
             jsonResponse = "{" + jsonResponse + "}";
 
             string httpVersion = "HTTP/1.1";
             context.contextResponse.contentType = "application/json";
-            context.contextResponse.contentLength = jsonResponse.Length;
+            string responseCode = context.contextResponse.statusCode.ToString("d");
+            string responseStatus = StrManualLib.ConstFormatToStringFormat(context.contextResponse.statusCode.ToString("g"));
 
-            string Headers = string.Format("{0} 200 OK\nContent: {1}\nContent-Length: {2}\n\n{3}",
-                httpVersion, context.contextResponse.contentType, context.contextResponse.contentLength, jsonResponse);
+            return string.Format("{0} {1} {2}\nContent-Type: {3}\nContent-Length: {4}\n\n{5}", httpVersion,
+                                                                                               responseCode,
+                                                                                               responseStatus,
+                                                                                               context.contextResponse.contentType,
+                                                                                               jsonResponse.Length,
+                                                                                               jsonResponse);
+        }
 
-            byte[] HeadersBuffer = Encoding.ASCII.GetBytes(Headers);
-            client.GetStream().Write(HeadersBuffer, 0, HeadersBuffer.Length);
+        private void SendResponse(TcpClient client, Context context)
+        {
+            string headers = PrepareResponse(context);
+            byte[] headersBuffer = Encoding.ASCII.GetBytes(headers);
+            client.GetStream().Write(headersBuffer, 0, headersBuffer.Length);
 
             client.Close();
         }
@@ -73,12 +88,8 @@ namespace SimpleHTTPServer.HTTPInteraction
             if (!context.contextRequest.url.StartsWith(COMPANY_PREFIX))
             {
                 context.contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
+                context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_COMPANY_PREFIX);
             }
-        }
-
-        private void SendError(TcpClient client, Constants.StatusCode statusCode)
-        {
-            throw new NotImplementedException();
         }
     }
 }
