@@ -46,6 +46,13 @@ namespace SimpleHTTPServer
 
         private void GetReqData(ref string request)
         {
+            // Проверка на наличие контента
+            if (contextRequest.contentLength == 0)
+            {
+                return;
+            }
+
+            // Удаление из строки requset всего лишнего до начала контента
             while (REQ_DATA_START != StrManualLib.GetNextWordWithDelete(ref request))
             {
                 if (0 == request.Length)
@@ -127,9 +134,32 @@ namespace SimpleHTTPServer
             int index;
             jsonString = jsonString.Replace(" ", string.Empty);
             jsonString = jsonString.Replace("\n", string.Empty);
+
+            string[] words = jsonString.Split(new char[] { ':', ',' });
+            for (index = 0; index < words.Length; index++)
+            {
+                bool result = true;
+                if (index % 2 == 0)
+                {
+                    result = words[index].StartsWith("\"") &&
+                        words[index].EndsWith("\"") &&
+                        words[index].Length > 2;
+                }
+                else
+                {
+                    result = !words[index].StartsWith("}") &&
+                        words[index].Length > 0;
+                }
+
+                if (!result)
+                {
+                    return false;
+                }
+            }
+
             for (index = 0; index < jsonString.Length;)
             {
-                if (!((jsonString[index] == '\"') || (jsonString[index] == ':') || (jsonString[index] == ',') || (jsonString[index] == '}')))
+                if (!((jsonString[index] == '"') || (jsonString[index] == ':') || (jsonString[index] == ',') || (jsonString[index] == '}')))
                 {
                     jsonString = jsonString.Remove(index, 1);
                 }
