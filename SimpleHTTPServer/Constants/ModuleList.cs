@@ -9,6 +9,7 @@ namespace SimpleHTTPServer.Constants
     class ModuleList
     {
         const string MODULE_REGIST = "regist";
+        const string MODULE_AUTH = "auth";
 
         public static Modules.IModule GetModuleByModuleName(string moduleName)
         {
@@ -18,6 +19,9 @@ namespace SimpleHTTPServer.Constants
             {
                 case MODULE_REGIST:
                     module = new Modules.Regist();
+                    break;
+                case MODULE_AUTH:
+                    module = new Modules.Auth();
                     break;
                 default:
                     module = null;

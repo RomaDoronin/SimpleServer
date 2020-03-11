@@ -57,6 +57,8 @@
     <Compile Include="InternalObject\Patient.cs" />
     <Compile Include="InternalObject\PetMedicalCard.cs" />
     <Compile Include="InternalObject\User.cs" />
+    <Compile Include="Modules\AModule.cs" />
+    <Compile Include="Modules\Auth.cs" />
     <Compile Include="Modules\IModule.cs" />
     <Compile Include="Modules\Regist.cs" />
     <Compile Include="StrManualLib\StrManualLib.cs" />

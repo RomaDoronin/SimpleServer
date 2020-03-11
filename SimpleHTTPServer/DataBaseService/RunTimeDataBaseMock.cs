@@ -56,7 +56,7 @@ namespace SimpleHTTPServer.DataBaseService
             throw new NotImplementedException();
         }
 
-        public DatabaseReturn GetAllUser(string key)
+        public DatabaseReturn GetAllUser()
         {
             return new DatabaseReturn(DatabaseStatus.DB_OK, new List<InternalObject.User>(m_users));
         }
@@ -71,9 +71,17 @@ namespace SimpleHTTPServer.DataBaseService
             throw new NotImplementedException();
         }
 
-        public DatabaseReturn GetUser()
+        public DatabaseReturn GetUserByUsername(string username)
         {
-            throw new NotImplementedException();
+            foreach (var user in m_users)
+            {
+                if (0 == string.Compare(user.username, username))
+                {
+                    return new DatabaseReturn(DatabaseStatus.DB_OK, new InternalObject.User(user));
+                }
+            }
+
+            return new DatabaseReturn(DatabaseStatus.DB_OBJECT_NOT_FOUND, null);
         }
 
         public DatabaseReturn SetPetMedicalCardToPatient(string patientId, PetMedicalCard petMedicalCard)

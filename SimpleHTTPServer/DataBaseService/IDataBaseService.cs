@@ -47,14 +47,14 @@ namespace SimpleHTTPServer.DataBaseService
         /// internalObject: User
         /// }
         /// </summary>
-        DatabaseReturn GetUser();
+        DatabaseReturn GetUserByUsername(string username);
         /// <summary>
         /// Return {
         /// status: DatabaseStatus,
-        /// internalObject: [User with one field "key"]
+        /// internalObject: [User]
         /// }
         /// </summary>
-        DatabaseReturn GetAllUser(string key);
+        DatabaseReturn GetAllUser();
 
         /// <summary>
         /// Return {

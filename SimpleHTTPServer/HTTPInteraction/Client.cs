@@ -77,8 +77,22 @@ namespace SimpleHTTPServer.HTTPInteraction
             {
                 messageValue = context.contextResponse.message;
             }
+            if (context.contextResponse.statusCode == Constants.StatusCode.CREATED)
+            {
+                messageValue = "create " + Constants.CommonConstants.DEFAULT_RESPONSE_MSG;
+            }
 
-            string jsonResponse = "{" + string.Format("\n    \"message\": \"{0}\"\n", messageValue) + "}";
+            string jsonResponse = "{\n";
+            if (context.contextResponse.respData.data.Count > 0)
+            {
+                jsonResponse += "    \"data\": {\n";
+                foreach (var key in context.contextResponse.respData.data.Keys)
+                {
+                    jsonResponse += string.Format("        \"{0}\": \"{1}\"\n", key, context.contextResponse.respData.data[key]);
+                }
+                jsonResponse += "    }\n";
+            }
+            jsonResponse += string.Format("    \"message\": \"{0}\"\n", messageValue) + "}";
 
             string responseCode = context.contextResponse.statusCode.ToString("d");
             string responseStatus = StrManualLib.ConstFormatToStringFormat(context.contextResponse.statusCode.ToString("g"));

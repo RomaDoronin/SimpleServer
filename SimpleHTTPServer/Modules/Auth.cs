@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Modules
 {
-    class Regist : AModule
+    class Auth : AModule
     {
         // Validate
         // ---------------------------------------------------------
@@ -14,44 +14,46 @@ namespace SimpleHTTPServer.Modules
         {
             var reqFieldDict = new Dictionary<string, string[]>
             {
-                { "POST", new string[] { "firstname", "secondname", "username", "hash_password" } }
+                { "PUT", new string[] { "username", "hash_password" } }
             };
 
             return reqFieldDict[httpReqName];
         }
 
-        public override void ValidatePOST(Context context)
+        public override void ValidatePUT(Context context)
         {
-            // Проверка на неповторяющийся username
-            ValidatePOSTNonRepeatingUsername(context);
+            // Проверка существует ли такой username
+            ValidatePUTUsernameExist(context);
         }
 
         // ProcessRequest
         // ---------------------------------------------------------
-        public override void Post(Context context)
+        public override void Put(Context context)
         {
-            InternalObject.User user = new InternalObject.User();
-            JSON reqData = context.contextRequest.reqData;
+            DataBaseService.DatabaseReturn databaseReturn = context.dataBase.GetUserByUsername(context.contextRequest.reqData.data["username"]);
 
-            user.accountId = StrManualLib.GenerateRandomString(16);
-            user.firstname = reqData.data["firstname"];
-            user.secondname = reqData.data["secondname"];
-            user.hashPassword = reqData.data["hash_password"];
-            user.username = reqData.data["username"];
-
-            if (context.dataBase.CreateUser(user).status != DataBaseService.DatabaseStatus.DB_OK)
+            if (databaseReturn.status != DataBaseService.DatabaseStatus.DB_OK)
             {
                 context.contextResponse.statusCode = Constants.StatusCode.INTERNAL_SERVER_ERROR;
                 context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.PROBLEM_WITH_ACCESS_DATABASE);
                 return;
             }
 
-            context.contextResponse.statusCode = Constants.StatusCode.CREATED;
+            var user = (InternalObject.User)databaseReturn.internalObject;
+
+            if (user.hashPassword != context.contextRequest.reqData.data["hash_password"])
+            {
+                context.contextResponse.statusCode = Constants.StatusCode.UNAUTHORIZED;
+                context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_PASSWORD);
+                return;
+            }
+
+            context.contextResponse.respData.data.Add("account_id", user.accountId);
         }
 
         // Private method
         // ---------------------------------------------------------
-        private void ValidatePOSTNonRepeatingUsername(Context context)
+        private void ValidatePUTUsernameExist(Context context)
         {
             DataBaseService.DatabaseReturn databaseReturn = context.dataBase.GetAllUser();
 
@@ -67,11 +69,12 @@ namespace SimpleHTTPServer.Modules
             {
                 if (user.username == context.contextRequest.reqData.data["username"])
                 {
-                    context.contextResponse.statusCode = Constants.StatusCode.CONFLICT;
-                    context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.USERNAME_ALREADY_EXIST);
                     return;
                 }
             }
+
+            context.contextResponse.statusCode = Constants.StatusCode.UNAUTHORIZED;
+            context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.NO_SUCH_USERNAME);
         }
     }
 }
