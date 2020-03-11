@@ -77,5 +77,58 @@ namespace SimpleHTTPServer
 
             return str;
         }
+
+        /// <summary>
+        /// Проверяют строку без первой скобки
+        /// </summary>
+        public static bool CheckStringForJsonFormat(string jsonString)
+        {
+            int index;
+            jsonString = jsonString.Replace(" ", string.Empty);
+            jsonString = jsonString.Replace("\n", string.Empty);
+
+            string[] words = jsonString.Split(new char[] { ':', ',' });
+            for (index = 0; index < words.Length; index++)
+            {
+                bool result = true;
+                if (index % 2 == 0)
+                {
+                    result = words[index].StartsWith("\"") &&
+                        words[index].EndsWith("\"") &&
+                        words[index].Length > 2;
+                }
+                else
+                {
+                    result = !words[index].StartsWith("}") &&
+                        words[index].Length > 0;
+                }
+
+                if (!result)
+                {
+                    return false;
+                }
+            }
+
+            for (index = 0; index < jsonString.Length;)
+            {
+                if (!((jsonString[index] == '"') || (jsonString[index] == ':') || (jsonString[index] == ',') || (jsonString[index] == '}')))
+                {
+                    jsonString = jsonString.Remove(index, 1);
+                }
+                else
+                {
+                    index++;
+                }
+            }
+
+            string jsonPatternStringValue = "\"\":\"\"";
+            jsonString = jsonString.Replace(jsonPatternStringValue + ",", string.Empty);
+            jsonString = jsonString.Replace(jsonPatternStringValue, "{");
+            string jsonPattern = "\"\":";
+            jsonString = jsonString.Replace(jsonPattern + ",", string.Empty);
+            jsonString = jsonString.Replace(jsonPattern, "{");
+
+            return jsonString == "{}";
+        }
     }
 }
