@@ -13,6 +13,7 @@ namespace SimpleHTTPServer.Constants
         public const string MODULE_AUTH = "auth";
 
         // With account
+        public const string MODULE_PATIENT = "patient";
 
         public static Modules.IModule GetModuleByModuleName(string moduleName)
         {
@@ -25,6 +26,9 @@ namespace SimpleHTTPServer.Constants
                     break;
                 case MODULE_AUTH:
                     module = new Modules.Auth();
+                    break;
+                case MODULE_PATIENT:
+                    module = new Modules.Patient();
                     break;
                 default:
                     module = null;

@@ -23,7 +23,8 @@ namespace SimpleHTTPServer
 
         private void GetURL(ref string request)
         {
-            contextRequest.url = StrManualLib.GetNextWordWithDelete(ref request);
+            string urlString = StrManualLib.GetNextWordWithDelete(ref request);
+            contextRequest.url = urlString.Split(Constants.CommonConstants.URL_SEPARATOR);
         }
 
         private void GetContentType(ref string request)
@@ -113,19 +114,15 @@ namespace SimpleHTTPServer
         private void CheckURL()
         {
             // Проверка на префикс компании
-            if (!contextRequest.url.StartsWith(Constants.CommonConstants.COMPANY_PREFIX))
+            if (contextRequest.url[(int)Constants.UrlPositionNumber.COMPANY_PREFIX] == Constants.CommonConstants.COMPANY_PREFIX)
             {
                 contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
                 contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_COMPANY_PREFIX);
                 return;
             }
 
-            // contextRequest.isAccountRequest = 
-
             // Проверка на наличие Account Id в случае запроса с залогиненого аккаунта
-            string[] words = contextRequest.url.Split(new char[] { Constants.CommonConstants.URL_SEPARATOR });
-
-            if (contextRequest.url.StartsWith(Constants.CommonConstants.COMPANY_PREFIX + Constants.CommonConstants.ACCOUNT_PREFIX))
+            if (contextRequest.url.Length > (int)Constants.UrlPositionNumberWithAccount.MODULE_NAME && contextRequest.url[(int)Constants.UrlPositionNumberWithAccount.ACCOUNTS] == Constants.CommonConstants.ACCOUNT_PREFIX)
             {
                 // Проверка на размер секций url
                 if (words.Length < (int)Constants.UrlPositionNumberWithAccount.MODULE_NAME)
@@ -160,6 +157,8 @@ namespace SimpleHTTPServer
                     contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.NON_EXISTENT_ACCOUNT_ID);
                     return;
                 }
+
+                contextRequest.isAccountRequest = true;
             }
             else
             {

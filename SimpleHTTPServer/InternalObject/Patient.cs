@@ -8,9 +8,17 @@ namespace SimpleHTTPServer.InternalObject
 {
     class Patient
     {
-        string patientId;
-        string firstname;
-        string secondname;
-        string petMedicalCardId;
+        public string patientId;
+        public string firstname;
+        public string secondname;
+        public string petMedicalCardId;
+
+        public Patient()
+        {
+            patientId = string.Empty;
+            firstname = string.Empty;
+            secondname = string.Empty;
+            petMedicalCardId = string.Empty;
+        }
     }
 }

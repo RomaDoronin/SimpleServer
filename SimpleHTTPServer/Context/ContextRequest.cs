@@ -9,7 +9,7 @@ namespace SimpleHTTPServer
     class ContextRequest
     {
         public string httpReqName;
-        public string url;
+        public string[] url;
         public string httpVersion;
         public string contentType;
         public string host;
@@ -20,7 +20,7 @@ namespace SimpleHTTPServer
         public ContextRequest()
         {
             httpReqName = string.Empty;
-            url = string.Empty;
+            url = new string[] { };
             httpVersion = string.Empty;
             contentType = string.Empty;
             host = string.Empty;

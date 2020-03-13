@@ -9,7 +9,8 @@ namespace SimpleHTTPServer.DataBaseService
 {
     class RunTimeDataBaseMock : IDataBaseService
     {
-        private List<InternalObject.User> m_users;
+        private List<User> m_userList;
+        private List<Patient> m_patientList;
 
         private static RunTimeDataBaseMock instance;
 
@@ -25,10 +26,12 @@ namespace SimpleHTTPServer.DataBaseService
 
         private RunTimeDataBaseMock()
         {
-            m_users = new List<User>();
+            m_userList = new List<User>();
+            m_patientList = new List<Patient>();
         }
 
         // IDataBaseService implementation
+        // ---------------------------------------------------------
 
         public DatabaseReturn ChangeUser(User user)
         {
@@ -37,7 +40,8 @@ namespace SimpleHTTPServer.DataBaseService
 
         public DatabaseReturn CreatePatient(Patient patient)
         {
-            throw new NotImplementedException();
+            m_patientList.Add(patient);
+            return new DatabaseReturn(DatabaseStatus.DB_OK, null);
         }
 
         public DatabaseReturn CreatePetMedicalCard(PetMedicalCard petMedicalCard)
@@ -47,7 +51,7 @@ namespace SimpleHTTPServer.DataBaseService
 
         public DatabaseReturn CreateUser(User user)
         {
-            m_users.Add(new User(user));
+            m_userList.Add(new User(user));
             return new DatabaseReturn(DatabaseStatus.DB_OK, null);
         }
 
@@ -58,7 +62,7 @@ namespace SimpleHTTPServer.DataBaseService
 
         public DatabaseReturn GetAllUser()
         {
-            return new DatabaseReturn(DatabaseStatus.DB_OK, new List<InternalObject.User>(m_users));
+            return new DatabaseReturn(DatabaseStatus.DB_OK, new List<InternalObject.User>(m_userList));
         }
 
         public DatabaseReturn GetPatient(Patient patient)
@@ -73,7 +77,7 @@ namespace SimpleHTTPServer.DataBaseService
 
         public DatabaseReturn GetUserByUsername(string username)
         {
-            foreach (var user in m_users)
+            foreach (var user in m_userList)
             {
                 if (0 == string.Compare(user.username, username))
                 {
@@ -86,7 +90,7 @@ namespace SimpleHTTPServer.DataBaseService
 
         public DatabaseReturn GetUserByAccountId(string accountId)
         {
-            foreach (var user in m_users)
+            foreach (var user in m_userList)
             {
                 if (0 == string.Compare(user.accountId, accountId))
                 {

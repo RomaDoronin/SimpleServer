@@ -39,7 +39,7 @@ namespace SimpleHTTPServer.Modules
             user.hashPassword = reqData.data["hash_password"];
             user.username = reqData.data["username"];
 
-            if (context.dataBase.CreateUser(user).status != DataBaseService.DatabaseStatus.DB_OK)
+            if (context.dataBase.CreateUser(user).status == DataBaseService.DatabaseStatus.DB_UNKNOWN_ERROR)
             {
                 context.contextResponse.statusCode = Constants.StatusCode.INTERNAL_SERVER_ERROR;
                 context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.PROBLEM_WITH_ACCESS_DATABASE);
