@@ -15,6 +15,7 @@ namespace SimpleHTTPServer
         public string host;
         public int contentLength;
         public JSON reqData;
+        public bool isAccountRequest;
 
         public ContextRequest()
         {
@@ -25,6 +26,7 @@ namespace SimpleHTTPServer
             host = string.Empty;
             contentLength = 0;
             reqData = new JSON("{\n}");
+            isAccountRequest = false;
         }
     }
 }

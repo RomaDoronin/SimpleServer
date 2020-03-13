@@ -8,8 +8,11 @@ namespace SimpleHTTPServer.Constants
 {
     class ModuleList
     {
-        const string MODULE_REGIST = "regist";
-        const string MODULE_AUTH = "auth";
+        // Without account
+        public const string MODULE_REGIST = "regist";
+        public const string MODULE_AUTH = "auth";
+
+        // With account
 
         public static Modules.IModule GetModuleByModuleName(string moduleName)
         {

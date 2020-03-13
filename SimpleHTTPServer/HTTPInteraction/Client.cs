@@ -44,7 +44,8 @@ namespace SimpleHTTPServer.HTTPInteraction
         private IModule GetModule(Context context)
         {
             string[] words = context.contextRequest.url.Split(new char[] { Constants.CommonConstants.URL_SEPARATOR });
-            string moduleName = words[(int)Constants.UrlPositionNumber.MODULE_NAME];
+            int moduleIndex = context.contextRequest.isAccountRequest ? (int)Constants.UrlPositionNumberWithAccount.MODULE_NAME : (int)Constants.UrlPositionNumber.MODULE_NAME;
+            string moduleName = words[moduleIndex];
             IModule module = Constants.ModuleList.GetModuleByModuleName(moduleName);
             if (module == null)
             {

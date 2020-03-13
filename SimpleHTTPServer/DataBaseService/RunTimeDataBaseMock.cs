@@ -84,6 +84,19 @@ namespace SimpleHTTPServer.DataBaseService
             return new DatabaseReturn(DatabaseStatus.DB_OBJECT_NOT_FOUND, null);
         }
 
+        public DatabaseReturn GetUserByAccountId(string accountId)
+        {
+            foreach (var user in m_users)
+            {
+                if (0 == string.Compare(user.accountId, accountId))
+                {
+                    return new DatabaseReturn(DatabaseStatus.DB_OK, new InternalObject.User(user));
+                }
+            }
+
+            return new DatabaseReturn(DatabaseStatus.DB_OBJECT_NOT_FOUND, null);
+        }
+
         public DatabaseReturn SetPetMedicalCardToPatient(string patientId, PetMedicalCard petMedicalCard)
         {
             throw new NotImplementedException();

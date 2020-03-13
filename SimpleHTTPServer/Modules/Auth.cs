@@ -12,12 +12,12 @@ namespace SimpleHTTPServer.Modules
         // ---------------------------------------------------------
         public override string[] GetRequiredFieldNames(string httpReqName)
         {
-            var reqFieldDict = new Dictionary<string, string[]>
+            switch (httpReqName)
             {
-                { "PUT", new string[] { "username", "hash_password" } }
-            };
+                case "PUT": return new string[] { "username", "hash_password" };
+            }
 
-            return reqFieldDict[httpReqName];
+            return new string[] { };
         }
 
         public override void ValidatePUT(Context context)

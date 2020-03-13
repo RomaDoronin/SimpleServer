@@ -60,6 +60,7 @@
     <Compile Include="Modules\AModule.cs" />
     <Compile Include="Modules\Auth.cs" />
     <Compile Include="Modules\IModule.cs" />
+    <Compile Include="Modules\Patient.cs" />
     <Compile Include="Modules\Regist.cs" />
     <Compile Include="StrManualLib\StrManualLib.cs" />
     <Compile Include="Program.cs" />

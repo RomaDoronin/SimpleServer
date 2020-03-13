@@ -12,12 +12,12 @@ namespace SimpleHTTPServer.Modules
         // ---------------------------------------------------------
         public override string[] GetRequiredFieldNames(string httpReqName)
         {
-            var reqFieldDict = new Dictionary<string, string[]>
+            switch (httpReqName)
             {
-                { "POST", new string[] { "firstname", "secondname", "username", "hash_password" } }
-            };
+                case "POST": return new string[] { "firstname", "secondname", "username", "hash_password" };
+            }
 
-            return reqFieldDict[httpReqName];
+            return new string[] { };
         }
 
         public override void ValidatePOST(Context context)
@@ -33,7 +33,7 @@ namespace SimpleHTTPServer.Modules
             InternalObject.User user = new InternalObject.User();
             JSON reqData = context.contextRequest.reqData;
 
-            user.accountId = StrManualLib.GenerateRandomString(16);
+            user.accountId = StrManualLib.GenerateRandomString(24);
             user.firstname = reqData.data["firstname"];
             user.secondname = reqData.data["secondname"];
             user.hashPassword = reqData.data["hash_password"];

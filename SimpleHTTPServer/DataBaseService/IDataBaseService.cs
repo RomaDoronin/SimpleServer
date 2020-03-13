@@ -51,6 +51,13 @@ namespace SimpleHTTPServer.DataBaseService
         /// <summary>
         /// Return {
         /// status: DatabaseStatus,
+        /// internalObject: User
+        /// }
+        /// </summary>
+        DatabaseReturn GetUserByAccountId(string accountId);
+        /// <summary>
+        /// Return {
+        /// status: DatabaseStatus,
         /// internalObject: [User]
         /// }
         /// </summary>

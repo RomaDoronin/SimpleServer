@@ -35,7 +35,9 @@ namespace SimpleHTTPServer.Constants
         INCORRECT_JSON_FORMAT,
         IDENTICAL_KEYS_ON_SAME_LEVEL,
         NO_SUCH_USERNAME,
-        INCORRECT_PASSWORD
+        INCORRECT_PASSWORD,
+        INCORRECT_URL,
+        NON_EXISTENT_ACCOUNT_ID
     }
 
     class ResponseStatusInfo
@@ -53,7 +55,9 @@ namespace SimpleHTTPServer.Constants
             {ErrorMessageKey.INCORRECT_JSON_FORMAT, "Incorrect JSON format"},
             {ErrorMessageKey.IDENTICAL_KEYS_ON_SAME_LEVEL, "Two identical keys on the same level"},
             {ErrorMessageKey.NO_SUCH_USERNAME, "There is no such username"},
-            {ErrorMessageKey.INCORRECT_PASSWORD, "The password was entered incorrectly"}
+            {ErrorMessageKey.INCORRECT_PASSWORD, "The password was entered incorrectly"},
+            {ErrorMessageKey.INCORRECT_URL, "Incorrect URL"},
+            {ErrorMessageKey.NON_EXISTENT_ACCOUNT_ID, "Non existent account id"}
         };
 
         public static string GetErrorMessage(ErrorMessageKey key)

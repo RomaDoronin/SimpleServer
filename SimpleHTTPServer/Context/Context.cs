@@ -117,6 +117,68 @@ namespace SimpleHTTPServer
             {
                 contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
                 contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_COMPANY_PREFIX);
+                return;
+            }
+
+            // contextRequest.isAccountRequest = 
+
+            // Проверка на наличие Account Id в случае запроса с залогиненого аккаунта
+            string[] words = contextRequest.url.Split(new char[] { Constants.CommonConstants.URL_SEPARATOR });
+
+            if (contextRequest.url.StartsWith(Constants.CommonConstants.COMPANY_PREFIX + Constants.CommonConstants.ACCOUNT_PREFIX))
+            {
+                // Проверка на размер секций url
+                if (words.Length < (int)Constants.UrlPositionNumberWithAccount.MODULE_NAME)
+                {
+                    contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
+                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_URL);
+                    return;
+                }
+
+                // Проверка что модуль является тем, что выполняется из под аккаунта
+                string moduleName = words[(int)Constants.UrlPositionNumberWithAccount.MODULE_NAME];
+                if (moduleName == Constants.ModuleList.MODULE_AUTH || moduleName == Constants.ModuleList.MODULE_REGIST)
+                {
+                    contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
+                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_URL);
+                    return;
+                }
+
+                // Проверяем существование пользователя под данным accountId
+                string accountId = words[(int)Constants.UrlPositionNumberWithAccount.ACCOUNT_ID];
+                DataBaseService.DatabaseReturn databaseReturn = dataBase.GetUserByAccountId(accountId);
+
+                if (databaseReturn.status == DataBaseService.DatabaseStatus.DB_UNKNOWN_ERROR)
+                {
+                    contextResponse.statusCode = Constants.StatusCode.INTERNAL_SERVER_ERROR;
+                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.PROBLEM_WITH_ACCESS_DATABASE);
+                    return;
+                }
+                else if (databaseReturn.status == DataBaseService.DatabaseStatus.DB_OBJECT_NOT_FOUND)
+                {
+                    contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
+                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.NON_EXISTENT_ACCOUNT_ID);
+                    return;
+                }
+            }
+            else
+            {
+                // Проверка на размер секций url
+                if (words.Length != (int)Constants.UrlPositionNumber.MODULE_NAME + 1)
+                {
+                    contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
+                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_URL);
+                    return;
+                }
+
+                // Проверка что модуль является тем, что выполняется  из под аккаунта
+                string moduleName = words[(int)Constants.UrlPositionNumber.MODULE_NAME];
+                if (moduleName != Constants.ModuleList.MODULE_AUTH && moduleName != Constants.ModuleList.MODULE_REGIST)
+                {
+                    contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
+                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_URL);
+                    return;
+                }
             }
         }
 
