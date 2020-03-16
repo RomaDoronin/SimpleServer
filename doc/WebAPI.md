@@ -7,7 +7,7 @@ curl -v X POST \
     -H "Content-Type: application/json" \
     -d '{"firstname":"Roman","secondname":"Doronin","username":"rdoronin","hash_password":"#9jfg3ksg34jh34g9$4geeg54zm"}' \
 {
-    "message": "ok"
+    "message": "success"
 }
 ```
 ```shell
@@ -28,7 +28,7 @@ curl -v X PUT \
     "data": {
         "account_id": "kg9254p94q3p43cf4cfp4fjq38"
     }
-    "message": "ok"
+    "message": "success"
 }
 ```
 ```shell
@@ -46,7 +46,7 @@ curl -v X POST \
     -H "Content-Type: application/json" \
     -d '{"firstname":"Patient67","secondname":"Ivanov"}' \
 {
-    "message": "ok"
+    "message": "success"
 }
 ```
 
@@ -74,7 +74,7 @@ curl -v X GET \
              }
         ]
     }
-    "message": "ok"
+    "message": "success"
 }
 ```
 
@@ -91,7 +91,7 @@ curl -v X GET \
         "secondname": "Ivanov",
         "pet_id": "{PET_ID}"
     }
-    "message": "ok"
+    "message": "success"
 }
 ```
 ```shell
@@ -107,11 +107,12 @@ curl -v X PATCH \
     -H "Content-Type: application/json" \
     -d '{"pet_medical_card_id":"{PET_MEDICAL_CARD_ID}"}' \
 {
-    "message": "ok"
+    "message": "success"
 }
 ```
 ```shell
-404 Not Found - Пациент с таким {PATIENT_ID} не найден / Медецинская карта животного с таким {PET_MEDICAL_CARD_ID} не найдена
+404 Not Found - Пациент с таким {PATIENT_ID} не найден
+404 Not Found - Медецинская карта животного с таким {PET_MEDICAL_CARD_ID} не найдена
 ```
 
 ----------------------------------------------------
@@ -125,7 +126,7 @@ curl -v X POST \
     -H "Content-Type: application/json" \
     -d '{"name":"Salem","disease":"Cold"}' \
 {
-    "message": "ok"
+    "message": "success"
 }
 ```
 
@@ -141,7 +142,7 @@ curl -v X GET \
         "name": "Salem",
         "disease": "Cold"
     }
-    "message": "ok"
+    "message": "success"
 }
 ```
 ```shell

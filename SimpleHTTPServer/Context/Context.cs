@@ -114,7 +114,7 @@ namespace SimpleHTTPServer
         private void CheckURL()
         {
             // Проверка на префикс компании
-            if (contextRequest.url[(int)Constants.UrlPositionNumber.COMPANY_PREFIX] == Constants.CommonConstants.COMPANY_PREFIX)
+            if (contextRequest.url[(int)Constants.UrlPositionNumber.COMPANY_PREFIX] != Constants.CommonConstants.COMPANY_PREFIX)
             {
                 contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
                 contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_COMPANY_PREFIX);
@@ -124,16 +124,8 @@ namespace SimpleHTTPServer
             // Проверка на наличие Account Id в случае запроса с залогиненого аккаунта
             if (contextRequest.url.Length > (int)Constants.UrlPositionNumberWithAccount.MODULE_NAME && contextRequest.url[(int)Constants.UrlPositionNumberWithAccount.ACCOUNTS] == Constants.CommonConstants.ACCOUNT_PREFIX)
             {
-                // Проверка на размер секций url
-                if (words.Length < (int)Constants.UrlPositionNumberWithAccount.MODULE_NAME)
-                {
-                    contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
-                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_URL);
-                    return;
-                }
-
                 // Проверка что модуль является тем, что выполняется из под аккаунта
-                string moduleName = words[(int)Constants.UrlPositionNumberWithAccount.MODULE_NAME];
+                string moduleName = contextRequest.url[(int)Constants.UrlPositionNumberWithAccount.MODULE_NAME];
                 if (moduleName == Constants.ModuleList.MODULE_AUTH || moduleName == Constants.ModuleList.MODULE_REGIST)
                 {
                     contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
@@ -142,7 +134,7 @@ namespace SimpleHTTPServer
                 }
 
                 // Проверяем существование пользователя под данным accountId
-                string accountId = words[(int)Constants.UrlPositionNumberWithAccount.ACCOUNT_ID];
+                string accountId = contextRequest.url[(int)Constants.UrlPositionNumberWithAccount.ACCOUNT_ID];
                 DataBaseService.DatabaseReturn databaseReturn = dataBase.GetUserByAccountId(accountId);
 
                 if (databaseReturn.status == DataBaseService.DatabaseStatus.DB_UNKNOWN_ERROR)
@@ -163,15 +155,15 @@ namespace SimpleHTTPServer
             else
             {
                 // Проверка на размер секций url
-                if (words.Length != (int)Constants.UrlPositionNumber.MODULE_NAME + 1)
+                if (contextRequest.url.Length <= (int)Constants.UrlPositionNumber.MODULE_NAME)
                 {
                     contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
                     contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_URL);
                     return;
                 }
 
-                // Проверка что модуль является тем, что выполняется  из под аккаунта
-                string moduleName = words[(int)Constants.UrlPositionNumber.MODULE_NAME];
+                // Проверка что модуль является тем, что выполняется из под аккаунта
+                string moduleName = contextRequest.url[(int)Constants.UrlPositionNumber.MODULE_NAME];
                 if (moduleName != Constants.ModuleList.MODULE_AUTH && moduleName != Constants.ModuleList.MODULE_REGIST)
                 {
                     contextResponse.statusCode = Constants.StatusCode.NOT_FOUND;
