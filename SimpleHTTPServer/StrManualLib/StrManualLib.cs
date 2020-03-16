@@ -49,6 +49,11 @@ namespace SimpleHTTPServer
         /// </summary>
         public static string RemoveSpecialSymbol(string str)
         {
+            if (str.Length <= 2 && !str.EndsWith("\""))
+            {
+                throw new Exception("Invalid input string");
+            }
+
             str = str.Remove(0, 1);
             if (str[str.Length - 1] != '"')
             {
@@ -69,6 +74,11 @@ namespace SimpleHTTPServer
         /// </summary>
         public static string ConstFormatToStringFormat(string str)
         {
+            if (str.Length == 0)
+            {
+                throw new Exception("Invalid input string");
+            }
+
             str = str.Replace('_', ' ');
             char firstLetter = str[0];
             str = str.Substring(1);
