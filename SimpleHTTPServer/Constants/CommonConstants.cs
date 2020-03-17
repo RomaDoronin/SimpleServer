@@ -6,13 +6,13 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Constants
 {
-    enum UrlPositionNumber
+    public enum UrlPositionNumber
     {
         COMPANY_PREFIX = 1,
         MODULE_NAME
     }
 
-    enum UrlPositionNumberWithAccount
+    public enum UrlPositionNumberWithAccount
     {
         COMPANY_PREFIX = 1,
         ACCOUNTS,
@@ -21,7 +21,7 @@ namespace SimpleHTTPServer.Constants
         MODULE_OBJECT_ID
     }
 
-    class CommonConstants
+    public class CommonConstants
     {
         public const string HTTP_VERSION = "HTTP/1.1";
         public const string COMPANY_PREFIX = "sklexp";

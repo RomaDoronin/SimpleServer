@@ -49,6 +49,8 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Constants\UnitTest_ModuleList.cs" />
+    <Compile Include="Context\UnitTest_Context.cs" />
+    <Compile Include="Context\UnitTest_JSON.cs" />
     <Compile Include="StrManualLib\UnitTest_StrManualLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
