@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Constants
 {
-    class ModuleList
+    public class ModuleList
     {
         // Without account
         public const string MODULE_REGIST = "regist";

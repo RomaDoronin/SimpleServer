@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.InternalObject
 {
-    class Patient
+    public class Patient
     {
         public string patientId;
         public string firstname;

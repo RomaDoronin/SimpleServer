@@ -6,14 +6,14 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.DataBaseService
 {
-    enum DatabaseStatus
+    public enum DatabaseStatus
     {
         DB_OK,
         DB_OBJECT_NOT_FOUND,
         DB_UNKNOWN_ERROR
     }
 
-    struct DatabaseReturn
+    public struct DatabaseReturn
     {
         public DatabaseStatus status;
         public Object internalObject;
@@ -25,7 +25,7 @@ namespace SimpleHTTPServer.DataBaseService
         }
     }
 
-    interface IDataBaseService
+    public interface IDataBaseService
     {
         /// <summary>
         /// Return {

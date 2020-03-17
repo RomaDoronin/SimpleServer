@@ -158,9 +158,7 @@ namespace SimpleHTTPServerUnitTest
             Assert.AreEqual(" ", StrManualLib.ConstFormatToStringFormat("_"));
             Assert.AreEqual("dsaf asdf sadf", StrManualLib.ConstFormatToStringFormat("dsaf asdf sadf"));
             Assert.AreEqual("Dsaf asdf sadf", StrManualLib.ConstFormatToStringFormat("DSAF asdf sadf"));
-
-            var ex = Assert.ThrowsException<Exception>(() => StrManualLib.ConstFormatToStringFormat(""));
-            Assert.AreEqual(ex.Message, "Invalid input string");
+            Assert.AreEqual("", StrManualLib.ConstFormatToStringFormat(""));
         }
 
         // CheckStringForJsonFormat

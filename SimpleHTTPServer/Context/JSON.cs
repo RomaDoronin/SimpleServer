@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer
 {
-    class JSON
+    public class JSON
     {
         public Dictionary<string, string> data;
 

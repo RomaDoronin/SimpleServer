@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Modules
 {
-    interface IModule
+    public interface IModule
     {
         void Validate(Context context);
         void ProcessRequest(Context context);

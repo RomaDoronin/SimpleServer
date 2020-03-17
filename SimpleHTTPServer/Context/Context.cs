@@ -3,7 +3,7 @@ using System.Collections.Generic;
 
 namespace SimpleHTTPServer
 {
-    class Context
+    public class Context
     {
         private const string KEY_CONTENT_TYPE = "Content-Type:";
         private const string KEY_HOST = "Host:";

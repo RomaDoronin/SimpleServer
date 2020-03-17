@@ -76,7 +76,7 @@ namespace SimpleHTTPServer
         {
             if (str.Length == 0)
             {
-                throw new Exception("Invalid input string");
+                return str;
             }
 
             str = str.Replace('_', ' ');

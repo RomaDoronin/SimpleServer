@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Constants
 {
-    enum StatusCode
+    public enum StatusCode
     {
         OK = 200,
         CREATED = 201,
@@ -22,7 +22,7 @@ namespace SimpleHTTPServer.Constants
         INTERNAL_SERVER_ERROR = 500
     }
 
-    enum ErrorMessageKey
+    public enum ErrorMessageKey
     {
         METHOD_NOT_ALLOWED,
         INCORRECT_COMPANY_PREFIX,
@@ -40,7 +40,7 @@ namespace SimpleHTTPServer.Constants
         NON_EXISTENT_ACCOUNT_ID
     }
 
-    class ResponseStatusInfo
+    public class ResponseStatusInfo
     {
         private static readonly Dictionary<ErrorMessageKey, string> errorMessageDict = new Dictionary<ErrorMessageKey, string>
         {

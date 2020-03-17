@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer
 {
-    class ContextResponse
+    public class ContextResponse
     {
         public Constants.StatusCode statusCode;
         public string message;

@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer
 {
-    class ContextRequest
+    public class ContextRequest
     {
         public string httpReqName;
         public string[] url;

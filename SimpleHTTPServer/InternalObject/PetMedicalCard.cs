@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.InternalObject
 {
-    class PetMedicalCard
+    public class PetMedicalCard
     {
         public string petMedicalCardId;
         public string name;
