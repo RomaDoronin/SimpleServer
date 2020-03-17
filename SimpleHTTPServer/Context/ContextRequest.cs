@@ -10,7 +10,6 @@ namespace SimpleHTTPServer
     {
         public string httpReqName;
         public string[] url;
-        public string httpVersion;
         public string contentType;
         public string host;
         public int contentLength;
@@ -21,7 +20,6 @@ namespace SimpleHTTPServer
         {
             httpReqName = string.Empty;
             url = new string[] { };
-            httpVersion = string.Empty;
             contentType = string.Empty;
             host = string.Empty;
             contentLength = 0;

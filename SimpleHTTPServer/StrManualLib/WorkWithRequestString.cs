@@ -60,12 +60,18 @@ namespace SimpleHTTPServer
 
         public static void SetReqData(ref string request, ref string[] splitRequest, string reqData)
         {
-            string oldReqData = string.Empty;
-            for (int count = (int)RequestPosition.REQ_DATA_START; count < splitRequest.Length; count++)
+            int index = 0;
+            foreach(var ch in request)
             {
-                oldReqData += splitRequest[count];
+                if (ch == '{')
+                {
+                    break;
+                }
+                index++;
             }
-            request = request.Replace(oldReqData, reqData);
+
+            request = request.Remove(index);
+            request += reqData;
         }
     }
 }

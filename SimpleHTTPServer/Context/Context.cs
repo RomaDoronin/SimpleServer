@@ -133,6 +133,8 @@ namespace SimpleHTTPServer
                     return;
                 }
 
+                contextRequest.isAccountRequest = true;
+
                 // Проверяем существование пользователя под данным accountId
                 string accountId = contextRequest.url[(int)Constants.UrlPositionNumberWithAccount.ACCOUNT_ID];
                 DataBaseService.DatabaseReturn databaseReturn = dataBase.GetUserByAccountId(accountId);
@@ -149,8 +151,6 @@ namespace SimpleHTTPServer
                     contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.NON_EXISTENT_ACCOUNT_ID);
                     return;
                 }
-
-                contextRequest.isAccountRequest = true;
             }
             else
             {
