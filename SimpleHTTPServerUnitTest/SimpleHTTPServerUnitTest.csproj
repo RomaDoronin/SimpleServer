@@ -48,8 +48,8 @@
     <Reference Include="System.Core" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="UnitTest_ModuleList.cs" />
-    <Compile Include="UnitTest_StrManualLib.cs" />
+    <Compile Include="Constants\UnitTest_ModuleList.cs" />
+    <Compile Include="StrManualLib\UnitTest_StrManualLib.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

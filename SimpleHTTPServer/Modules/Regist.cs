@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Modules
 {
-    class Regist : AModule
+    public class Regist : AModule
     {
         // Validate
         // ---------------------------------------------------------

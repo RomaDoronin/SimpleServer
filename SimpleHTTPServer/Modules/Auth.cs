@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Modules
 {
-    class Auth : AModule
+    public class Auth : AModule
     {
         // Validate
         // ---------------------------------------------------------

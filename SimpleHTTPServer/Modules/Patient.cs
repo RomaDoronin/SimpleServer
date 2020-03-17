@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Modules
 {
-    class Patient : AModule
+    public class Patient : AModule
     {
         // Validate
         // ---------------------------------------------------------

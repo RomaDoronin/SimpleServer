@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer.Modules
 {
-    abstract class AModule : IModule
+    public abstract class AModule : IModule
     {
         // Validate
         // ---------------------------------------------------------
