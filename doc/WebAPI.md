@@ -65,15 +65,15 @@ curl -v X GET \
                 "firstname":"Patient67",
                 "secondname":"Ivanov",
                 "pet_id":"{PET_ID}"
-             },
-             {
+            },
+            {
                 "patient_id": "{PATIENT_ID}",
                 "firstname":"Patient68",
                 "secondname":"Ivanov",
                 "pet_id":"{PET_ID}"
-             }
+            }
         ]
-    }
+    },
     "message": "success"
 }
 ```
@@ -90,7 +90,7 @@ curl -v X GET \
         "firstname": "Patient67",
         "secondname": "Ivanov",
         "pet_id": "{PET_ID}"
-    }
+    },
     "message": "success"
 }
 ```
@@ -141,7 +141,7 @@ curl -v X GET \
     "data": {
         "name": "Salem",
         "disease": "Cold"
-    }
+    },
     "message": "success"
 }
 ```

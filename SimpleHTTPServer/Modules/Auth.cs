@@ -30,7 +30,7 @@ namespace SimpleHTTPServer.Modules
         // ---------------------------------------------------------
         public override void Put(Context context)
         {
-            DataBaseService.DatabaseReturn databaseReturn = context.dataBase.GetUserByUsername(context.contextRequest.reqData.data["username"]);
+            DataBaseService.DatabaseReturn databaseReturn = context.dataBase.GetUserByUsername((string)context.contextRequest.reqData.data["username"]);
 
             if (databaseReturn.status != DataBaseService.DatabaseStatus.DB_OK)
             {

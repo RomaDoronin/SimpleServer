@@ -49,18 +49,20 @@ namespace SimpleHTTPServer
         /// </summary>
         public static string RemoveSpecialSymbol(string str)
         {
-            if (str.Length <= 2 && !str.EndsWith("\""))
+            if (str.StartsWith("\""))
             {
-                throw new Exception("Invalid input string");
+                str = str.Remove(0, 1);
             }
-
-            str = str.Remove(0, 1);
-            if (str[str.Length - 1] != '"')
+            if (str.EndsWith(",") || str.EndsWith(":"))
+            {
+                str = str.Remove(str.Length - 1, 1);
+            }
+            if (str.EndsWith("\""))
             {
                 str = str.Remove(str.Length - 1, 1);
             }
 
-            return str.Remove(str.Length - 1, 1);
+            return str;
         }
 
         public static string GenerateRandomString(int length)

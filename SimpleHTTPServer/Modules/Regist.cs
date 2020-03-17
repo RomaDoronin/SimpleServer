@@ -34,10 +34,10 @@ namespace SimpleHTTPServer.Modules
             JSON reqData = context.contextRequest.reqData;
 
             user.accountId = StrManualLib.GenerateRandomString(24);
-            user.firstname = reqData.data["firstname"];
-            user.secondname = reqData.data["secondname"];
-            user.hashPassword = reqData.data["hash_password"];
-            user.username = reqData.data["username"];
+            user.firstname = (string)reqData.data["firstname"];
+            user.secondname = (string)reqData.data["secondname"];
+            user.hashPassword = (string)reqData.data["hash_password"];
+            user.username = (string)reqData.data["username"];
 
             if (context.dataBase.CreateUser(user).status == DataBaseService.DatabaseStatus.DB_UNKNOWN_ERROR)
             {

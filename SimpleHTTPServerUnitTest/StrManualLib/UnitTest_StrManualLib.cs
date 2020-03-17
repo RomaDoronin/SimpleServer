@@ -104,29 +104,27 @@ namespace SimpleHTTPServerUnitTest
         {
             string input = "I love programming";
             string output = StrManualLib.RemoveSpecialSymbol(input);
-            Assert.AreEqual(" love programmi", output);
+            Assert.AreEqual("I love programming", output);
 
             input = "love";
             output = StrManualLib.RemoveSpecialSymbol(input);
-            Assert.AreEqual("o", output);
+            Assert.AreEqual("love", output);
 
             input = "lov";
             output = StrManualLib.RemoveSpecialSymbol(input);
-            Assert.AreEqual("", output);
+            Assert.AreEqual("lov", output);
 
             input = "lov\"";
             output = StrManualLib.RemoveSpecialSymbol(input);
-            Assert.AreEqual("ov", output);
+            Assert.AreEqual("lov", output);
         }
 
         [TestMethod]
         public void Test_RemoveSpecialSymbol_InputStringLengthLessThree()
         {
             Assert.AreEqual("", StrManualLib.RemoveSpecialSymbol("\"\""));
-            Assert.AreEqual("", StrManualLib.RemoveSpecialSymbol("l\""));
-
-            var ex = Assert.ThrowsException<Exception>(() => StrManualLib.RemoveSpecialSymbol("l"));
-            Assert.AreEqual(ex.Message, "Invalid input string");
+            Assert.AreEqual("l", StrManualLib.RemoveSpecialSymbol("l\""));
+            Assert.AreEqual("l", StrManualLib.RemoveSpecialSymbol("l"));
         }
 
         // GenerateRandomString
