@@ -89,13 +89,23 @@ namespace SimpleHTTPServer
         }
 
         /// <summary>
-        /// Проверяют строку без первой скобки
+        /// Может проверяют строку без открывающей '{'
         /// </summary>
         public static bool CheckStringForJsonFormat(string jsonString)
         {
             int index;
             jsonString = jsonString.Replace(" ", string.Empty);
             jsonString = jsonString.Replace("\n", string.Empty);
+
+            if (jsonString.StartsWith("{"))
+            {
+                jsonString = jsonString.Remove(0, 1);
+            }
+
+            if (jsonString == "}")
+            {
+                return true;
+            }
 
             string[] words = jsonString.Split(new char[] { ':', ',' });
             for (index = 0; index < words.Length; index++)

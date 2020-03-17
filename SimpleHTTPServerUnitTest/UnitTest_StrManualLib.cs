@@ -166,23 +166,111 @@ namespace SimpleHTTPServerUnitTest
         // CheckStringForJsonFormat
         // ---------------------------------------------------------
         [TestMethod]
-        public void Test_CheckStringForJsonFormat_TEST1()
+        public void Test_CheckStringForJsonFormat_OneValue()
+        {
+            string input = "{\n" +
+                           "    \"key\": \"value\"\n" +
+                           "}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+ 
+            input = "{\n    \"key\": \"value\"\n}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\n\"key\": \"value\"\n}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key\": \"value\"}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key\":\"value\"}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+        }
+
+        [TestMethod]
+        public void Test_CheckStringForJsonFormat_AbsentOpeningBracket()
+        {
+            string input = "\"key\":\"value\"}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+        }
+
+        [TestMethod]
+        public void Test_CheckStringForJsonFormat_AbsentClosingBracket()
+        {
+            string input = "{\"key\":\"value\"";
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat(input));
+        }
+
+        [TestMethod]
+        public void Test_CheckStringForJsonFormat_AbsentColon()
+        {
+            string input = "{\"key\" \"value\"}";
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat(input));
+        }
+
+        [TestMethod]
+        public void Test_CheckStringForJsonFormat_AbsentQuotationMark()
+        {
+            string input = "{key\": \"value\"}";
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key: \"value\"}";
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{key: \"value\"}";
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key\": value\"}";
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key\": \"value}";
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key\": 12}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key\": true}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+        }
+
+        [TestMethod]
+        public void Test_CheckStringForJsonFormat_ManyValue()
+        {
+            string input = "{\n" +
+                           "    \"key1\": \"value1\",\n" +
+                           "    \"key2\": \"value2\"\n" +
+                           "}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\n\"key1\":\"value1\",\n\"key2\":\"value2\"\n}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key1\":\"value1\",\"key2\":\"value2\"}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\n" +
+                    "    \"key1\": \"value1\",\n" +
+                    "    \"key2\": \"value2\",\n" +
+                    "    \"key3\": \"value3\"\n" +
+                    "}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\n\"key1\": \"value1\",\n\"key2\": \"value2\",\n\"key3\": \"value3\"\n}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+
+            input = "{\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"}";
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat(input));
+        }
+
+        [TestMethod]
+        public void Test_CheckStringForJsonFormat_EmptyInput()
         {
             Assert.IsTrue(StrManualLib.CheckStringForJsonFormat("{}"));
             Assert.IsTrue(StrManualLib.CheckStringForJsonFormat("{ }"));
-            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat("{ \"\":\"\" }"));
-        }
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat("{\n}"));
 
-        [TestMethod]
-        public void Test_CheckStringForJsonFormat_TEST2()
-        {
-            Assert.AreEqual(1, 0);
-        }
-
-        [TestMethod]
-        public void Test_CheckStringForJsonFormat_TEST3()
-        {
-            Assert.AreEqual(1, 0);
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat("{ \"\":\"\" }"));
+            Assert.IsFalse(StrManualLib.CheckStringForJsonFormat("{ \"\":\"value\" }"));
+            Assert.IsTrue(StrManualLib.CheckStringForJsonFormat("{ \"key\":\"\" }"));
         }
     }
 }
