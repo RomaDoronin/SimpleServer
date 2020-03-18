@@ -136,5 +136,38 @@ namespace SimpleHTTPServerUnitTest.Context
 
         // ToString
         // ---------------------------------------------------------
+        [TestMethod]
+        public void Test_ToString_StringJSON()
+        {
+            json = new JSON("{\"key\": \"value\"}");
+            Assert.AreEqual("{\n    \"key\": \"value\"\n}", json.ToString());
+
+            json = new JSON("{\"key1\":\"value1\", \"key2\":\"value2\"}");
+            Assert.AreEqual("{\n    \"key1\": \"value1\",\n    \"key2\": \"value2\"\n}", json.ToString());
+        }
+
+        [TestMethod]
+        public void Test_ToString_NumberJSON()
+        {
+            json = new JSON("{\"key\": 12}");
+            Assert.AreEqual("{\n    \"key\": 12\n}", json.ToString());
+
+            json = new JSON("{\"key1\":15, \"key2\":25.6}");
+            Assert.AreEqual("{\n    \"key1\": 15,\n    \"key2\": 25,6\n}", json.ToString());
+        }
+
+        [TestMethod]
+        public void Test_ToString_ListJSON()
+        {
+            json = new JSON("{\"key\": \"value\"}");
+            Assert.AreEqual("{\n    \"key\": \"value\"\n}", json.ToString());
+        }
+
+        [TestMethod]
+        public void Test_ToString_InternalJSON()
+        {
+            json = new JSON("{\"key\": \"value\"}");
+            Assert.AreEqual("{\n    \"key\": \"value\"\n}", json.ToString());
+        }
     }
 }

@@ -49,9 +49,10 @@ namespace SimpleHTTPServer
                 {
                     strData += ",";
                 }
-                strData += "\n    \"" + key + "\": \"" + data[key] + "\"";
+                string value = data[key].ToString();
+                strData += "\n    \"" + key + "\": " + value;
             }
-            strData += "}";
+            strData += "\n}";
 
             return strData;
         }
