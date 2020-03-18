@@ -7,6 +7,16 @@ using System.Threading.Tasks;
 
 namespace SimpleHTTPServer
 {
+    public enum ReturnValueType
+    {
+        STRING,
+        JSON,
+        LIST,
+        FLOAT,
+        INTEGER,
+        UNKNOWN
+    }
+
     public class JSON
     {
         public Dictionary<string, object> data;
@@ -20,69 +30,14 @@ namespace SimpleHTTPServer
 
         public JSON(string strData)
         {
-            if (strData.StartsWith("{") && strData[1] != ' ' && strData[1] != '\n')
-            {
-                strData = strData.Remove(0, 1);
-                strData = "{ " + strData;
-            }
-            if (strData.EndsWith("}") && strData[strData.Length - 2] != ' ' && strData[strData.Length - 2] != '\n')
-            {
-                strData = strData.Remove(strData.Length - 1, 1);
-                strData = strData + " }";
-            }
-
-            if ("{" != StrManualLib.GetNextWordWithDelete(ref strData))
+            strData = strData.Replace(" ", string.Empty);
+            strData = strData.Replace("\n", string.Empty);
+            if (!strData.StartsWith("{") || !strData.EndsWith("}"))
             {
                 throw new Exception(INCORRECT_JSON_FORMAT);
             }
-
-            data = new Dictionary<string, object>();
-
-            string key;
-            while ("}" != (key = StrManualLib.GetNextWordWithDelete(ref strData)) && strData.Length > 0)
-            {
-                key = StrManualLib.RemoveSpecialSymbol(key);
-                string preValue = StrManualLib.GetNextWordWithDelete(ref strData);
-                object value;
-                if (preValue.StartsWith("\"")) // STRING
-                {
-                    value = StrManualLib.RemoveSpecialSymbol(preValue);
-                }
-                else if (preValue.StartsWith("[")) // LIST
-                {
-                    value = 0;
-                }
-                else if (preValue.StartsWith("{")) // JSON
-                {
-                    int index = strData.IndexOf('}');
-                    preValue = strData.Remove(index + 1);
-                    strData = strData.Remove(0, index + 1);
-                    if (strData.StartsWith(","))
-                    {
-                        strData = strData.Remove(0, 1);
-                    }
-                    value = new JSON("{ " + preValue);
-                }
-                else // NUMBER
-                {
-                    preValue = StrManualLib.RemoveSpecialSymbol(preValue);
-                    if (preValue.Contains(".")) // FLOAT
-                    {
-                        value = float.Parse(preValue, CultureInfo.InvariantCulture.NumberFormat);
-                    }
-                    else // INTEGER
-                    {
-                        value = int.Parse(preValue);
-                    }
-                }
-
-                data.Add(key, value);
-            }
-
-            if (key != "}")
-            {
-                throw new Exception(INCORRECT_JSON_FORMAT);
-            }
+            strData = StrManualLib.DeleteFirstAndLastChar(strData);
+            SetDictData(strData);
         }
 
         public override string ToString()
@@ -99,6 +54,119 @@ namespace SimpleHTTPServer
             strData += "}";
 
             return strData;
+        }
+
+        // Private
+        // ---------------------------------------------------------
+
+        private void SetDictData(string strData)
+        {
+            data = new Dictionary<string, object>();
+            string key = string.Empty;
+            object value = null;
+            string[] words = StrManualLib.SmartSplit(strData, new char[] { ':', ',' }); // strData.Split(new char[] { ':', ',' });
+
+            for (int count = 0; count < words.Length; count += 2)
+            {
+                key = StrManualLib.DeleteFirstAndLastChar(words[count]);
+                value = GetValue(words[count + 1]);
+                data.Add(key, value);
+            }
+        }
+
+        private object GetValue(string valueString)
+        {
+            ReturnValueType type = ReturnValueType.UNKNOWN;
+            return GetValue(valueString, ref type);
+        }
+
+        private object GetTypeList(ReturnValueType valueType, string[] listElement)
+        {
+            switch (valueType)
+            {
+                case ReturnValueType.STRING:
+                    var stringList = new List<string>();
+                    foreach(var elem in listElement)
+                    {
+                        string value = elem;
+                        stringList.Add(value);
+                    }
+                    return stringList;
+                case ReturnValueType.JSON:
+                    var jsonList = new List<JSON>();
+                    foreach (var elem in listElement)
+                    {
+                        JSON value = new JSON(elem);
+                        jsonList.Add(value);
+                    }
+                    return jsonList;
+                case ReturnValueType.LIST:
+                    return new List<object>(); // !!!
+                case ReturnValueType.FLOAT:
+                    var floatList = new List<float>();
+                    foreach (var elem in listElement)
+                    {
+                        float value = float.Parse(elem, CultureInfo.InvariantCulture.NumberFormat);
+                        floatList.Add(value);
+                    }
+                    return floatList;
+                case ReturnValueType.INTEGER:
+                    var intList = new List<int>();
+                    foreach (var elem in listElement)
+                    {
+                        int value = int.Parse(elem);
+                        intList.Add(value);
+                    }
+                    return intList;
+                default:
+                    return new List<object>();
+            }
+        }
+
+        private object GetValue(string valueString, ref ReturnValueType valueType)
+        {
+            object value = null;
+
+            switch (valueString[0])
+            {
+                case '"': // STRING
+                    valueType = ReturnValueType.STRING;
+                    value = StrManualLib.DeleteFirstAndLastChar(valueString);
+                    break;
+                case '{': // JSON
+                    valueType = ReturnValueType.JSON;
+                    value = new JSON(valueString);
+                    break;
+                case '[': // LIST
+                    valueType = ReturnValueType.LIST;
+                    valueString = StrManualLib.DeleteFirstAndLastChar(valueString);
+                    if (valueString.Length == 0)
+                    {
+                        value = new List<object>();
+                        break;
+                    }
+
+                    string[] listElement = valueString.Split(new char[] { ',' });
+                    ReturnValueType type = ReturnValueType.UNKNOWN;
+                    GetValue(listElement[0], ref type);
+
+                    value = GetTypeList(type, listElement);
+                    break;
+                default: // NUMBER
+                    if (valueString.Contains(".")) // FLOAT
+                    {
+                        valueType = ReturnValueType.FLOAT;
+                        value = float.Parse(valueString, CultureInfo.InvariantCulture.NumberFormat);
+                    }
+                    else // INTEGER
+                    {
+                        valueType = ReturnValueType.INTEGER;
+                        value = int.Parse(valueString);
+                    }
+                    break;
+            }
+
+            return value;
         }
     }
 }

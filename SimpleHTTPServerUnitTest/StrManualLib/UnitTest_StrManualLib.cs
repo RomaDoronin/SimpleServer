@@ -268,5 +268,139 @@ namespace SimpleHTTPServerUnitTest
             Assert.IsFalse(StrManualLib.CheckStringForJsonFormat("{ \"\":\"value\" }"));
             Assert.IsTrue(StrManualLib.CheckStringForJsonFormat("{ \"key\":\"\" }"));
         }
+
+        // DeleteFirstAndLastChar
+        // ---------------------------------------------------------
+        [TestMethod]
+        public void Test_DeleteFirstAndLastChar()
+        {
+            Assert.AreEqual("\"qwerty\"", StrManualLib.DeleteFirstAndLastChar("{\"qwerty\"}"));
+            Assert.AreEqual("qwerty", StrManualLib.DeleteFirstAndLastChar("\"qwerty\""));
+            Assert.AreEqual("wert", StrManualLib.DeleteFirstAndLastChar("qwerty"));
+            Assert.AreEqual("er", StrManualLib.DeleteFirstAndLastChar("wert"));
+            Assert.AreEqual("", StrManualLib.DeleteFirstAndLastChar("er"));
+            Assert.AreEqual("", StrManualLib.DeleteFirstAndLastChar("a"));
+            Assert.AreEqual("", StrManualLib.DeleteFirstAndLastChar(""));
+        }
+
+        // SmartSplit
+        // ---------------------------------------------------------
+        [TestMethod]
+        public void Test_SmartSplit_OneJsonPair()
+        {
+            string str = "\"key\":\"value\"";
+            string[] words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key\"");
+            Assert.AreEqual(words[1], "\"value\"");
+        }
+
+        [TestMethod]
+        public void Test_SmartSplit_ManyJsonPair()
+        {
+            string str = "\"key1\":\"value1\",\"key2\":\"value2\"";
+            string[] words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "\"value2\"");
+
+            str = "\"key1\":\"value1\",\"key2\":\"value2\",\"key3\":\"value3\"";
+            words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "\"value2\"");
+            Assert.AreEqual(words[4], "\"key3\"");
+            Assert.AreEqual(words[5], "\"value3\"");
+        }
+
+        [TestMethod]
+        public void Test_SmartSplit_InternalJson()
+        {
+            string str = "\"key1\":\"value1\",\"key2\":{\"key21\":\"value21\"}";
+            string[] words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "{\"key21\":\"value21\"}");
+
+            str = "\"key1\":\"value1\",\"key2\":{\"key21\":\"value21\"},\"key3\":{\"key31\":{\"key311\":\"value311\"}}";
+            words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "{\"key21\":\"value21\"}");
+            Assert.AreEqual(words[4], "\"key3\"");
+            Assert.AreEqual(words[5], "{\"key31\":{\"key311\":\"value311\"}}");
+
+            str = "\"key1\":\"value1\",\"key2\":{\"key21\":\"value21\"},\"key3\":{\"key31\":{\"key311\":\"value311\"}},\"key4\":{}";
+            words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "{\"key21\":\"value21\"}");
+            Assert.AreEqual(words[4], "\"key3\"");
+            Assert.AreEqual(words[5], "{\"key31\":{\"key311\":\"value311\"}}");
+            Assert.AreEqual(words[6], "\"key4\"");
+            Assert.AreEqual(words[7], "{}");
+        }
+
+        [TestMethod]
+        public void Test_SmartSplit_InternalList()
+        {
+            string str = "\"key1\":\"value1\",\"key2\":[\"value21\",\"value22\",\"value23\"]";
+            string[] words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "[\"value21\",\"value22\",\"value23\"]");
+
+            str = "\"key1\":\"value1\",\"key2\":[\"value21\",\"value22\",\"value23\"],\"key3\":[]";
+            words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "[\"value21\",\"value22\",\"value23\"]");
+            Assert.AreEqual(words[4], "\"key3\"");
+            Assert.AreEqual(words[5], "[]");
+
+            str = "\"key1\":\"value1\",\"key2\":[[\"value211\",\"value212\"],[\"value221\",\"value222\"],[\"value231\",\"value232\"]]";
+            words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "[[\"value211\",\"value212\"],[\"value221\",\"value222\"],[\"value231\",\"value232\"]]");
+        }
+
+        [TestMethod]
+        public void Test_SmartSplit_InternalListPlusJson()
+        {
+            string str = "\"key1\":\"value1\",\"key2\":{\"key21\":[{\"key211\":\"value211\"},{\"key212\":\"value212\"},{\"key213\":\"value213\"}]}";
+            string[] words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "\"value1\"");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "{\"key21\":[{\"key211\":\"value211\"},{\"key212\":\"value212\"},{\"key213\":\"value213\"}]}");
+        }
+
+        [TestMethod]
+        public void Test_SmartSplit_ListOfJson()
+        {
+            string str = "\"key1\":[{\"key11\":\"value11\"},{\"key12\":\"value12\"},{\"key13\":\"value13\"}]";
+            string[] words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "[{\"key11\":\"value11\"},{\"key12\":\"value12\"},{\"key13\":\"value13\"}]");
+        }
+
+        [TestMethod]
+        public void Test_SmartSplit_ListOfJsonPlusJsonOfList()
+        {
+            string str = "\"key1\":[{\"key11\":\"value11\"},{\"key12\":\"value12\"},{\"key13\":\"value13\"}],\"key2\":{\"key21\":[5,1,4]}";
+            string[] words = StrManualLib.SmartSplit(str, new char[] { ':', ',' });
+            Assert.AreEqual(words[0], "\"key1\"");
+            Assert.AreEqual(words[1], "[{\"key11\":\"value11\"},{\"key12\":\"value12\"},{\"key13\":\"value13\"}]");
+            Assert.AreEqual(words[2], "\"key2\"");
+            Assert.AreEqual(words[3], "{\"key21\":[5,1,4]}");
+        }
     }
 }

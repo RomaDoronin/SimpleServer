@@ -9,6 +9,8 @@ namespace SimpleHTTPServer
     public class StrManualLib
     {
         private static Random random = new Random();
+        private const string REPLACE_OPEN_BRACKET = "<";
+        private const string REPLACE_CLOSE_BRACKET = ">";
 
         /// <summary>
         /// 'str': "Input our string" -> "our string",
@@ -151,6 +153,87 @@ namespace SimpleHTTPServer
             jsonString = jsonString.Replace(jsonPattern, "{");
 
             return jsonString == "{}";
+        }
+
+        public static string DeleteFirstAndLastChar(string strData)
+        {
+            if (strData.Length < 2)
+            {
+                return "";
+            }
+            strData = strData.Remove(0, 1);
+            return strData.Remove(strData.Length - 1, 1);
+        }
+
+        private static string ReplaceHighObject(string str, List<string> subObjectList)
+        {
+            bool presentObjectValue = true;
+            while (presentObjectValue)
+            {
+                // Выбор ближайших скобок
+                char objectCloseBracket = ']';
+                int indexOpenBreacket = str.IndexOfAny(new char[] { '{', '[' });
+                char objectOpenBracket = indexOpenBreacket > -1 ? str[indexOpenBreacket]: '[';
+                if (objectOpenBracket == '{')
+                {
+                    objectCloseBracket = '}';
+                }
+
+                presentObjectValue = false;
+                int flag = 0;
+                int startIndex = str.IndexOf(objectOpenBracket);
+                int index = 0;
+                while (-1 != (index = str.IndexOfAny(new char[] { objectOpenBracket, objectCloseBracket }, index)))
+                {
+                    presentObjectValue = true;
+                    if (str[index] == objectOpenBracket)
+                    {
+                        flag++;
+                    }
+                    else
+                    {
+                        flag--;
+                    }
+
+                    if (flag == 0)
+                    {
+                        string subJson = str.Substring(startIndex, index - startIndex + 1);
+                        str = str.Replace(subJson, REPLACE_OPEN_BRACKET + subObjectList.Count.ToString() + REPLACE_CLOSE_BRACKET);
+                        subObjectList.Add(subJson);
+                        break;
+                    }
+
+                    index++;
+                }
+            }
+
+            return str;
+        }
+
+        /// <summary>
+        /// Не сплитим json - {}, списки - []
+        /// </summary>
+        public static string[] SmartSplit(string str, char[] separatorArr)
+        {
+            var subObjectList = new List<string>();
+
+            str = ReplaceHighObject(str, subObjectList);
+
+            string[] wordArr = str.Split(separatorArr, StringSplitOptions.RemoveEmptyEntries);
+
+            if (subObjectList.Count > 0)
+            {
+                for (int count = 0; count < wordArr.Length; count++)
+                {
+                    if (wordArr[count].StartsWith(REPLACE_OPEN_BRACKET) && wordArr[count].EndsWith(REPLACE_CLOSE_BRACKET))
+                    {
+                        int index = int.Parse(DeleteFirstAndLastChar(wordArr[count]));
+                        wordArr[count] = subObjectList[index];
+                    }
+                }
+            }
+
+            return wordArr;
         }
     }
 }

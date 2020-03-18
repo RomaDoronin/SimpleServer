@@ -109,13 +109,29 @@ namespace SimpleHTTPServerUnitTest.Context
         [TestMethod]
         public void Test_JSON_CreatWithValueList()
         {
-            json = new JSON("{\"key\": \"value\"}");
-            Assert.AreEqual("value", json.data["key"]);
+            json = new JSON("{\"key\": [12, 14, 16]}");
+            var intList = (List<int>)(json.data["key"]);
+            Assert.AreEqual(12, intList[0]);
+            Assert.AreEqual(14, intList[1]);
+            Assert.AreEqual(16, intList[2]);
 
-            json = new JSON("{\"key1\": \"value1\",\n" +
-                            " \"key2\": \"value2\"}");
-            Assert.AreEqual("value1", json.data["key1"]);
-            Assert.AreEqual("value2", json.data["key2"]);
+            json = new JSON("{\"key\": [12.6, 14.4, 16.0]}");
+            var floatList = (List<float>)(json.data["key"]);
+            Assert.AreEqual(12.6f, floatList[0]);
+            Assert.AreEqual(14.4f, floatList[1]);
+            Assert.AreEqual(16.0f, floatList[2]);
+
+            json = new JSON("{\"key\": [\"value1\", \"value2\", \"value3\"]}");
+            var stringList = (List<string>)(json.data["key"]);
+            Assert.AreEqual("\"value1\"", stringList[0]);
+            Assert.AreEqual("\"value2\"", stringList[1]);
+            Assert.AreEqual("\"value3\"", stringList[2]);
+
+            json = new JSON("{\"key1\": [{\"key11\":\"value11\"}, {\"key12\":\"value12\"}, {\"key13\":\"value13\"}]}");
+            var jsonList = (List<JSON>)(json.data["key1"]);
+            Assert.AreEqual("value11", jsonList[0].data["key11"]);
+            Assert.AreEqual("value12", jsonList[1].data["key12"]);
+            Assert.AreEqual("value13", jsonList[2].data["key13"]);
         }
 
         // ToString
