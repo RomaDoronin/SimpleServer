@@ -19,9 +19,6 @@ namespace SimpleHTTPServer
 
     public class WorkWithRequestString
     {
-        //private string request;
-        //private string[] splitRequest;
-
         public static void SetHTTPReqName(ref string request, ref string[] splitRequest, string httpReqName)
         {
             request = request.Replace(splitRequest[(int)RequestPosition.HTTP_REQ_NAME], httpReqName);

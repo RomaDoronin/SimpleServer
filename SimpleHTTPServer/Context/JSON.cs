@@ -40,6 +40,49 @@ namespace SimpleHTTPServer
             SetDictData(strData);
         }
 
+        private string ListToString(object list)
+        {
+            string result = "";
+            const string INT_LIST = "System.Collections.Generic.List`1[System.Int32]";
+            const string FLOAT_LIST = "System.Collections.Generic.List`1[System.Single]";
+            const string JSON_LIST = "System.Collections.Generic.List`1[SimpleHTTPServer.JSON]";
+
+            switch (list.ToString())
+            {
+                case INT_LIST:
+                    List<int> intList = (List<int>)list;
+                    foreach(var val in intList)
+                    {
+                        result += "    " + val + ",\n";
+                    }
+                    break;
+                case FLOAT_LIST:
+                    List<float> floatList = (List<float>)list;
+                    foreach (var val in floatList)
+                    {
+                        string rightFloat = val.ToString().Replace(',', '.');
+                        result += "    " + rightFloat + ",\n";
+                    }
+                    break;
+                case JSON_LIST:
+                    List<JSON> jsonList = (List<JSON>)list;
+                    foreach (var val in jsonList)
+                    {
+                        result += val + ",\n";
+                    }
+                    result = result.Replace("\n", "\n    ");
+                    result = result.Remove(result.Length - 4, 4);
+                    result = "    " + result;
+                    break;
+                default:
+                    break;
+            }
+
+            result = result.Remove(result.Length - 2, 2);
+            result = "[\n" + result + "\n]";
+            return result;
+        }
+
         public override string ToString()
         {
             string strData = "{";
@@ -50,6 +93,21 @@ namespace SimpleHTTPServer
                     strData += ",";
                 }
                 string value = data[key].ToString();
+
+                if (data[key].GetType() == "".GetType())
+                {
+                    value = "\"" + value + "\"";
+                }
+                else if (data[key].GetType() == 1.0f.GetType())
+                {
+                    value = value.Replace(',', '.');
+                }
+                else if (value.StartsWith("System.Collections.Generic.List"))
+                {
+                    value = ListToString(data[key]);
+                }
+
+                value = value.Replace("\n", "\n    ");
                 strData += "\n    \"" + key + "\": " + value;
             }
             strData += "\n}";
@@ -65,7 +123,7 @@ namespace SimpleHTTPServer
             data = new Dictionary<string, object>();
             string key = string.Empty;
             object value = null;
-            string[] words = StrManualLib.SmartSplit(strData, new char[] { ':', ',' }); // strData.Split(new char[] { ':', ',' });
+            string[] words = StrManualLib.SmartSplit(strData, new char[] { ':', ',' });
 
             for (int count = 0; count < words.Length; count += 2)
             {
@@ -147,7 +205,8 @@ namespace SimpleHTTPServer
                         break;
                     }
 
-                    string[] listElement = valueString.Split(new char[] { ',' });
+
+                    string[] listElement = StrManualLib.SmartSplit(valueString, new char[] { ',' });
                     ReturnValueType type = ReturnValueType.UNKNOWN;
                     GetValue(listElement[0], ref type);
 

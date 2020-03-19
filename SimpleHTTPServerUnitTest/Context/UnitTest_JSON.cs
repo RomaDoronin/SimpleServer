@@ -153,21 +153,113 @@ namespace SimpleHTTPServerUnitTest.Context
             Assert.AreEqual("{\n    \"key\": 12\n}", json.ToString());
 
             json = new JSON("{\"key1\":15, \"key2\":25.6}");
-            Assert.AreEqual("{\n    \"key1\": 15,\n    \"key2\": 25,6\n}", json.ToString());
+            Assert.AreEqual("{\n    \"key1\": 15,\n    \"key2\": 25.6\n}", json.ToString());
         }
 
         [TestMethod]
         public void Test_ToString_ListJSON()
         {
-            json = new JSON("{\"key\": \"value\"}");
-            Assert.AreEqual("{\n    \"key\": \"value\"\n}", json.ToString());
+            json = new JSON("{\"key1\": \"value1\", \"key2\": [21, 22]}");
+            Assert.AreEqual("{\n" +
+                            "    \"key1\": \"value1\",\n" +
+                            "    \"key2\": [\n" +
+                            "        21,\n" +
+                            "        22\n" +
+                            "    ]\n" +
+                            "}", json.ToString());
+
+            json = new JSON("{\"key1\": \"value1\", \"key2\": [21.6, 22.5, 23.85]}");
+            Assert.AreEqual("{\n" +
+                            "    \"key1\": \"value1\",\n" +
+                            "    \"key2\": [\n" +
+                            "        21.6,\n" +
+                            "        22.5,\n" +
+                            "        23.85\n" +
+                            "    ]\n" +
+                            "}", json.ToString());
+
+            json = new JSON("{" +
+                            "    \"key1\": \"value1\"," +
+                            "    \"key2\": [21, 22]," +
+                            "    \"key3\": [" +
+                            "        {" +
+                            "            \"key311\": \"value311\"," +
+                            "            \"key312\": \"value312\"" +
+                            "        }," +
+                            "        {" +
+                            "            \"key321\": \"value321\"" +
+                            "        }" +
+                            "    ]" +
+                            "}");
+            Assert.AreEqual("{\n" +
+                            "    \"key1\": \"value1\",\n" +
+                            "    \"key2\": [\n" +
+                            "        21,\n" +
+                            "        22\n" +
+                            "    ],\n" +
+                            "    \"key3\": [\n" +
+                            "        {\n" +
+                            "            \"key311\": \"value311\",\n" +
+                            "            \"key312\": \"value312\"\n" +
+                            "        },\n" +
+                            "        {\n" +
+                            "            \"key321\": \"value321\"\n" +
+                            "        }\n" +
+                            "    ]\n" +
+                            "}", json.ToString());
         }
 
         [TestMethod]
         public void Test_ToString_InternalJSON()
         {
-            json = new JSON("{\"key\": \"value\"}");
-            Assert.AreEqual("{\n    \"key\": \"value\"\n}", json.ToString());
+            json = new JSON("{\"key1\": \"value1\", \"key2\": {\"key21\":21, \"key22\":22}}");
+            Assert.AreEqual("{\n" +
+                            "    \"key1\": \"value1\",\n" +
+                            "    \"key2\": {\n" +
+                            "        \"key21\": 21,\n" +
+                            "        \"key22\": 22\n" +
+                            "    }\n" +
+                            "}", json.ToString());
+
+            json = new JSON("{\"key1\": \"value1\", \"key2\": {\"key21\":21.6, \"key22\":22.5, \"key23\":23.85}}");
+            Assert.AreEqual("{\n" +
+                            "    \"key1\": \"value1\",\n" +
+                            "    \"key2\": {\n" +
+                            "        \"key21\": 21.6,\n" +
+                            "        \"key22\": 22.5,\n" +
+                            "        \"key23\": 23.85\n" +
+                            "    }\n" +
+                            "}", json.ToString());
+
+            json = new JSON("{" +
+                            "    \"key1\": \"value1\"," +
+                            "    \"key2\": {\"key21\": 21, \"key22\": 22}," +
+                            "    \"key3\": {" +
+                            "        \"key31\": {" +
+                            "            \"key311\": \"value311\"," +
+                            "            \"key312\": \"value312\"" +
+                            "        }," +
+                            "        \"key32\": {" +
+                            "            \"key321\": \"value321\"" +
+                            "        }" +
+                            "    }" +
+                            "}");
+            Assert.AreEqual("{\n" +
+                            "    \"key1\": \"value1\",\n" +
+                            "    \"key2\": {\n" +
+                            "        \"key21\": 21,\n" +
+                            "        \"key22\": 22\n" +
+                            "    },\n" +
+                            "    \"key3\": {\n" +
+                            "        \"key31\": {\n" +
+                            "            \"key311\": \"value311\",\n" +
+                            "            \"key312\": \"value312\"\n" +
+                            "        },\n" +
+                            "        \"key32\": {\n" +
+                            "            \"key321\": \"value321\"\n" +
+                            "        }\n" +
+                            "    }\n" +
+                            "}", json.ToString());
         }
     }
 }
