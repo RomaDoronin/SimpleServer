@@ -65,7 +65,7 @@ namespace SimpleHTTPServer.Modules
             var userList = (List<InternalObject.User>)databaseReturn.internalObject;
             foreach (var user in userList)
             {
-                if (user.username == context.contextRequest.reqData.data["username"])
+                if (user.username == context.contextRequest.reqData.data["username"].ToString())
                 {
                     context.contextResponse.statusCode = Constants.StatusCode.CONFLICT;
                     context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.USERNAME_ALREADY_EXIST);

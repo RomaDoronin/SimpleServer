@@ -41,8 +41,8 @@ namespace SimpleHTTPServer.Modules
             var patient = new InternalObject.Patient
             {
                 patientId = StrManualLib.GenerateRandomString(24),
-                firstname = (string)context.contextRequest.reqData.data["firstname"],
-                secondname = (string)context.contextRequest.reqData.data["secondname"]
+                firstname = context.contextRequest.reqData.data["firstname"].ToString(),
+                secondname = context.contextRequest.reqData.data["secondname"].ToString()
             };
 
             DataBaseService.DatabaseReturn databaseReturn = context.dataBase.CreatePatient(patient);

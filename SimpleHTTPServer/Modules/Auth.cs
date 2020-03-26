@@ -30,7 +30,7 @@ namespace SimpleHTTPServer.Modules
         // ---------------------------------------------------------
         public override void Put(Context context)
         {
-            DataBaseService.DatabaseReturn databaseReturn = context.dataBase.GetUserByUsername((string)context.contextRequest.reqData.data["username"]);
+            DataBaseService.DatabaseReturn databaseReturn = context.dataBase.GetUserByUsername(context.contextRequest.reqData.data["username"].ToString());
 
             if (databaseReturn.status != DataBaseService.DatabaseStatus.DB_OK)
             {
@@ -41,7 +41,7 @@ namespace SimpleHTTPServer.Modules
 
             var user = (InternalObject.User)databaseReturn.internalObject;
 
-            if (user.hashPassword != context.contextRequest.reqData.data["hash_password"])
+            if (user.hashPassword != context.contextRequest.reqData.data["hash_password"].ToString())
             {
                 context.contextResponse.statusCode = Constants.StatusCode.UNAUTHORIZED;
                 context.contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.INCORRECT_PASSWORD);
@@ -67,7 +67,7 @@ namespace SimpleHTTPServer.Modules
             var userList = (List<InternalObject.User>)databaseReturn.internalObject;
             foreach (var user in userList)
             {
-                if (user.username == context.contextRequest.reqData.data["username"])
+                if (user.username == context.contextRequest.reqData.data["username"].ToString())
                 {
                     return;
                 }

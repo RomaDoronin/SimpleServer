@@ -224,10 +224,10 @@ namespace SimpleHTTPServerUnitTest.Context
         public void Test_Context_CorrectReqData()
         {
             context = new SimpleHTTPServer.Context(request);
-            Assert.AreEqual("Roman", context.contextRequest.reqData.data["firstname"]);
-            Assert.AreEqual("Doronin", context.contextRequest.reqData.data["secondname"]);
-            Assert.AreEqual("rdoronin", context.contextRequest.reqData.data["username"]);
-            Assert.AreEqual("#9jfg3ksg34jh34g9$4geeg54zm", context.contextRequest.reqData.data["hash_password"]);
+            Assert.AreEqual("Roman", context.contextRequest.reqData.data["firstname"].ToString());
+            Assert.AreEqual("Doronin", context.contextRequest.reqData.data["secondname"].ToString());
+            Assert.AreEqual("rdoronin", context.contextRequest.reqData.data["username"].ToString());
+            Assert.AreEqual("#9jfg3ksg34jh34g9$4geeg54zm", context.contextRequest.reqData.data["hash_password"].ToString());
         }
 
         [TestMethod]
