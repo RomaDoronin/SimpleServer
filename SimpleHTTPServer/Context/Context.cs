@@ -63,6 +63,7 @@ namespace SimpleHTTPServer
                     return;
                 }
             }
+            request = REQ_DATA_START + request;
             if (!StrManualLib.CheckStringForJsonFormat(request.Substring(0)))
             {
                 contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
@@ -70,23 +71,7 @@ namespace SimpleHTTPServer
                 return;
             }
 
-            string key;
-            while (REQ_DATA_END != (key = StrManualLib.GetNextWordWithDelete(ref request)))
-            {
-                string value = StrManualLib.RemoveSpecialSymbol(StrManualLib.GetNextWordWithDelete(ref request));
-                key = StrManualLib.RemoveSpecialSymbol(key);
-
-                if (!contextRequest.reqData.data.ContainsKey(key))
-                {
-                    contextRequest.reqData.data.Add(key, value);
-                }
-                else
-                {
-                    contextResponse.statusCode = Constants.StatusCode.BAD_REQUEST;
-                    contextResponse.message = Constants.ResponseStatusInfo.GetErrorMessage(Constants.ErrorMessageKey.IDENTICAL_KEYS_ON_SAME_LEVEL);
-                    return;
-                }
-            }
+            contextRequest.reqData = new JSON(request);
         }
 
         // Checkers

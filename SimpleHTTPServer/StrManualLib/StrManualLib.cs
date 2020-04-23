@@ -78,7 +78,7 @@ namespace SimpleHTTPServer
         /// </summary>
         public static string ConstFormatToStringFormat(string str)
         {
-            if (str.Length == 0)
+            if (str.Length == 0 || str == "OK")
             {
                 return str;
             }
@@ -165,49 +165,84 @@ namespace SimpleHTTPServer
             return strData.Remove(strData.Length - 1, 1);
         }
 
-        private static string ReplaceHighObject(string str, List<string> subObjectList)
+        /// <summary>
+        /// {"key":"value", "key1":[1,2,3]} -> {<0>:<1>, <2>:<3>}
+        /// </summary>
+        public static string ReplaceHighObjectWithMark(string str, List<string> subObjectList)
         {
             bool presentObjectValue = true;
             while (presentObjectValue)
             {
                 // Выбор ближайших скобок
-                char objectCloseBracket = ']';
-                int indexOpenBreacket = str.IndexOfAny(new char[] { '{', '[' });
-                char objectOpenBracket = indexOpenBreacket > -1 ? str[indexOpenBreacket]: '[';
-                if (objectOpenBracket == '{')
+                char objectCloseBracket = '"';
+                int indexOpenBracket = str.IndexOfAny(new char[] { '{', '[', '"' });
+                if (indexOpenBracket == -1)
                 {
-                    objectCloseBracket = '}';
+                    break;
+                }
+
+                char objectOpenBracket = str[indexOpenBracket];
+                switch (objectOpenBracket)
+                {
+                    case '{':
+                        objectCloseBracket = '}';
+                        break;
+                    case '[':
+                        objectCloseBracket = ']';
+                        break;
                 }
 
                 presentObjectValue = false;
-                int flag = 0;
-                int startIndex = str.IndexOf(objectOpenBracket);
-                int index = 0;
-                while (-1 != (index = str.IndexOfAny(new char[] { objectOpenBracket, objectCloseBracket }, index)))
+                int flag = 1;
+                int index = indexOpenBracket;
+                while (-1 != (index = str.IndexOfAny(new char[] { objectOpenBracket, objectCloseBracket }, index + 1)))
                 {
                     presentObjectValue = true;
-                    if (str[index] == objectOpenBracket)
+                    if (str[index] == objectCloseBracket)
                     {
-                        flag++;
+                        flag--;
                     }
                     else
                     {
-                        flag--;
+                        flag++;
                     }
 
                     if (flag == 0)
                     {
-                        string subJson = str.Substring(startIndex, index - startIndex + 1);
-                        str = str.Replace(subJson, REPLACE_OPEN_BRACKET + subObjectList.Count.ToString() + REPLACE_CLOSE_BRACKET);
-                        subObjectList.Add(subJson);
+                        string highObject = str.Substring(indexOpenBracket, index - indexOpenBracket + 1);
+                        str = str.Replace(highObject, REPLACE_OPEN_BRACKET + subObjectList.Count.ToString() + REPLACE_CLOSE_BRACKET);
+                        subObjectList.Add(highObject);
                         break;
                     }
-
-                    index++;
                 }
             }
 
             return str;
+        }
+
+        public static string ReplaceMarkWithHighObject(string str, List<string> subObjectList)
+        {
+            for (int count = 0; count < subObjectList.Count; count++)
+            {
+                string mark = REPLACE_OPEN_BRACKET + count.ToString() + REPLACE_CLOSE_BRACKET;
+                str = str.Replace(mark, subObjectList[count]);
+            }
+
+            return str;
+        }
+
+        public static string[] ReplaceMarkWithHighObject(string[] wordArr, List<string> subObjectList)
+        {
+            for (int wordCount = 0; wordCount < wordArr.Length; wordCount++)
+            {
+                for (int subObjectCount = 0; subObjectCount < subObjectList.Count; subObjectCount++)
+                {
+                    string mark = REPLACE_OPEN_BRACKET + subObjectCount.ToString() + REPLACE_CLOSE_BRACKET;
+                    wordArr[wordCount] = wordArr[wordCount].Replace(mark, subObjectList[subObjectCount]);
+                }
+            }
+
+            return wordArr;
         }
 
         /// <summary>
@@ -217,21 +252,14 @@ namespace SimpleHTTPServer
         {
             var subObjectList = new List<string>();
 
-            str = ReplaceHighObject(str, subObjectList);
+            str = ReplaceHighObjectWithMark(str, subObjectList);
+
+            // +-
+            str = str.Replace(" ", string.Empty);
 
             string[] wordArr = str.Split(separatorArr, StringSplitOptions.RemoveEmptyEntries);
 
-            if (subObjectList.Count > 0)
-            {
-                for (int count = 0; count < wordArr.Length; count++)
-                {
-                    if (wordArr[count].StartsWith(REPLACE_OPEN_BRACKET) && wordArr[count].EndsWith(REPLACE_CLOSE_BRACKET))
-                    {
-                        int index = int.Parse(DeleteFirstAndLastChar(wordArr[count]));
-                        wordArr[count] = subObjectList[index];
-                    }
-                }
-            }
+            wordArr = ReplaceMarkWithHighObject(wordArr, subObjectList);
 
             return wordArr;
         }

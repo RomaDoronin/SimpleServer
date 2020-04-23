@@ -43,6 +43,7 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Constants\HTTPTemplate.cs" />
     <Compile Include="Constants\ModuleList.cs" />
     <Compile Include="Constants\ResponseStatusInfo.cs" />
     <Compile Include="Constants\CommonConstants.cs" />

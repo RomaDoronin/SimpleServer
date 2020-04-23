@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using Microsoft.VisualStudio.TestTools.UnitTesting;
 using SimpleHTTPServer;
 
@@ -281,6 +282,118 @@ namespace SimpleHTTPServerUnitTest
             Assert.AreEqual("", StrManualLib.DeleteFirstAndLastChar("er"));
             Assert.AreEqual("", StrManualLib.DeleteFirstAndLastChar("a"));
             Assert.AreEqual("", StrManualLib.DeleteFirstAndLastChar(""));
+        }
+
+        // ReplaceHighObjectWithMark and ReplaceMarkWithHighObject
+        // ---------------------------------------------------------
+        [TestMethod]
+        public void Test_ReplaceHighObjectWithMark_StringValue()
+        {
+            string startStr = "\"key\":\"value\"";
+            List<string> subObjectList = new List<string>();
+            string actualStr = StrManualLib.ReplaceHighObjectWithMark(startStr, subObjectList);
+            Assert.AreEqual("<0>:<1>", actualStr);
+            Assert.AreEqual("\"key\"", subObjectList[0]);
+            Assert.AreEqual("\"value\"", subObjectList[1]);
+
+            actualStr = StrManualLib.ReplaceMarkWithHighObject(new string[] { actualStr }, subObjectList)[0];
+            Assert.AreEqual(startStr, actualStr);
+        }
+
+        [TestMethod]
+        public void Test_ReplaceHighObjectWithMark_StringWithSpace()
+        {
+            string startStr = "\"key\" : \"value\"";
+            List<string> subObjectList = new List<string>();
+            string actualStr = StrManualLib.ReplaceHighObjectWithMark(startStr, subObjectList);
+            Assert.AreEqual("<0> : <1>", actualStr);
+            Assert.AreEqual("\"key\"", subObjectList[0]);
+            Assert.AreEqual("\"value\"", subObjectList[1]);
+
+            actualStr = StrManualLib.ReplaceMarkWithHighObject(new string[] { actualStr }, subObjectList)[0];
+            Assert.AreEqual(startStr, actualStr);
+        }
+
+        [TestMethod]
+        public void Test_ReplaceHighObjectWithMark_StringWithBrackets()
+        {
+            string startStr = "\"key\":\"[value]\",\"key1\":\"{value}\"";
+            List<string> subObjectList = new List<string>();
+            string actualStr = StrManualLib.ReplaceHighObjectWithMark(startStr, subObjectList);
+            Assert.AreEqual("<0>:<1>,<2>:<3>", actualStr);
+            Assert.AreEqual("\"key\"", subObjectList[0]);
+            Assert.AreEqual("\"[value]\"", subObjectList[1]);
+            Assert.AreEqual("\"key1\"", subObjectList[2]);
+            Assert.AreEqual("\"{value}\"", subObjectList[3]);
+
+            actualStr = StrManualLib.ReplaceMarkWithHighObject(new string[] { actualStr }, subObjectList)[0];
+            Assert.AreEqual(startStr, actualStr);
+        }
+
+        [TestMethod]
+        public void Test_ReplaceHighObjectWithMark_StringValueWithSpace()
+        {
+            string startStr = "\"key\":\"value value\"";
+            List<string> subObjectList = new List<string>();
+            string actualStr = StrManualLib.ReplaceHighObjectWithMark(startStr, subObjectList);
+            Assert.AreEqual("<0>:<1>", actualStr);
+            Assert.AreEqual("\"key\"", subObjectList[0]);
+            Assert.AreEqual("\"value value\"", subObjectList[1]);
+
+            actualStr = StrManualLib.ReplaceMarkWithHighObject(new string[] { actualStr }, subObjectList)[0];
+            Assert.AreEqual(startStr, actualStr);
+
+            startStr = "\"key\":\"value _ value\"";
+            subObjectList = new List<string>();
+            actualStr = StrManualLib.ReplaceHighObjectWithMark(startStr, subObjectList);
+            Assert.AreEqual("<0>:<1>", actualStr);
+            Assert.AreEqual("\"key\"", subObjectList[0]);
+            Assert.AreEqual("\"value _ value\"", subObjectList[1]);
+
+            actualStr = StrManualLib.ReplaceMarkWithHighObject(new string[] { actualStr }, subObjectList)[0];
+            Assert.AreEqual(startStr, actualStr);
+        }
+
+        [TestMethod]
+        public void Test_ReplaceHighObjectWithMark_ListValue()
+        {
+            string startStr = "\"key\":[1,2,3]";
+            List<string> subObjectList = new List<string>();
+            string actualStr = StrManualLib.ReplaceHighObjectWithMark(startStr, subObjectList);
+            Assert.AreEqual("<0>:<1>", actualStr);
+            Assert.AreEqual("\"key\"", subObjectList[0]);
+            Assert.AreEqual("[1,2,3]", subObjectList[1]);
+
+            actualStr = StrManualLib.ReplaceMarkWithHighObject(new string[] { actualStr }, subObjectList)[0];
+            Assert.AreEqual(startStr, actualStr);
+        }
+
+        [TestMethod]
+        public void Test_ReplaceHighObjectWithMark_ListOfStringValue()
+        {
+            string startStr = "\"key\":[\"str1\", \"str2\", \"str3\"]";
+            List<string> subObjectList = new List<string>();
+            string actualStr = StrManualLib.ReplaceHighObjectWithMark(startStr, subObjectList);
+            Assert.AreEqual("<0>:<1>", actualStr);
+            Assert.AreEqual("\"key\"", subObjectList[0]);
+            Assert.AreEqual("[\"str1\", \"str2\", \"str3\"]", subObjectList[1]);
+
+            actualStr = StrManualLib.ReplaceMarkWithHighObject(new string[] { actualStr }, subObjectList)[0];
+            Assert.AreEqual(startStr, actualStr);
+        }
+
+        [TestMethod]
+        public void Test_ReplaceHighObjectWithMark_JsonValue()
+        {
+            string startStr = "\"key\":{\"str1\":\"str2\"}";
+            List<string> subObjectList = new List<string>();
+            string actualStr = StrManualLib.ReplaceHighObjectWithMark(startStr, subObjectList);
+            Assert.AreEqual("<0>:<1>", actualStr);
+            Assert.AreEqual("\"key\"", subObjectList[0]);
+            Assert.AreEqual("{\"str1\":\"str2\"}", subObjectList[1]);
+
+            actualStr = StrManualLib.ReplaceMarkWithHighObject(new string[] { actualStr }, subObjectList)[0];
+            Assert.AreEqual(startStr, actualStr);
         }
 
         // SmartSplit

@@ -57,6 +57,18 @@ namespace SimpleHTTPServerUnitTest.Context
         }
 
         [TestMethod]
+        public void Test_JSON_CreatWithStringWithSpace()
+        {
+            json = new JSON("{\"key\": \"value value\"}");
+            Assert.AreEqual("value value", json.data["key"]);
+
+            json = new JSON("{\"key1\": \"value1  value\",\n" +
+                            " \"key2\": \"value2 _ value\"}");
+            Assert.AreEqual("value1  value", json.data["key1"]);
+            Assert.AreEqual("value2 _ value", json.data["key2"]);
+        }
+
+        [TestMethod]
         public void Test_JSON_CreatWithValueNumber()
         {
             json = new JSON("{\"key\": 0}");

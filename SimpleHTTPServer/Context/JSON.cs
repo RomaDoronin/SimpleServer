@@ -30,13 +30,18 @@ namespace SimpleHTTPServer
 
         public JSON(string strData)
         {
-            strData = strData.Replace(" ", string.Empty);
-            strData = strData.Replace("\n", string.Empty);
             if (!strData.StartsWith("{") || !strData.EndsWith("}"))
             {
                 throw new Exception(INCORRECT_JSON_FORMAT);
             }
+
             strData = StrManualLib.DeleteFirstAndLastChar(strData);
+            List<string> subObject = new List<string>();
+            strData = StrManualLib.ReplaceHighObjectWithMark(strData, subObject);
+            strData = strData.Replace(" ", string.Empty);
+            strData = strData.Replace("\n", string.Empty);
+            strData = StrManualLib.ReplaceMarkWithHighObject(strData, subObject);
+
             SetDictData(strData);
         }
 

@@ -11,7 +11,7 @@ namespace SimpleHTTPServer.HTTPInteraction
 
         static void ClientThread(object stateInfo)
         {
-            new Client((TcpClient)stateInfo);
+            Client.Run((TcpClient)stateInfo);
         }
 
         public Server(int port)
