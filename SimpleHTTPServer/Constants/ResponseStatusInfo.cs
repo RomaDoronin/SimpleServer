@@ -37,7 +37,8 @@ namespace SimpleHTTPServer.Constants
         NO_SUCH_USERNAME,
         INCORRECT_PASSWORD,
         INCORRECT_URL,
-        NON_EXISTENT_ACCOUNT_ID
+        NON_EXISTENT_ACCOUNT_ID,
+        OBJECT_NOT_FOUND
     }
 
     public class ResponseStatusInfo
@@ -57,7 +58,8 @@ namespace SimpleHTTPServer.Constants
             {ErrorMessageKey.NO_SUCH_USERNAME, "There is no such username"},
             {ErrorMessageKey.INCORRECT_PASSWORD, "The password was entered incorrectly"},
             {ErrorMessageKey.INCORRECT_URL, "Incorrect URL"},
-            {ErrorMessageKey.NON_EXISTENT_ACCOUNT_ID, "Non existent account id"}
+            {ErrorMessageKey.NON_EXISTENT_ACCOUNT_ID, "Non existent account id"},
+            {ErrorMessageKey.OBJECT_NOT_FOUND, "Object not found"}
         };
 
         public static string GetErrorMessage(ErrorMessageKey key)

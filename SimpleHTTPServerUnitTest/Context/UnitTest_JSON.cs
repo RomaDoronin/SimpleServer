@@ -273,5 +273,39 @@ namespace SimpleHTTPServerUnitTest.Context
                             "    }\n" +
                             "}", json.ToString());
         }
+
+        [TestMethod]
+        public void Test_ToString_EmptyList()
+        {
+            json = new JSON("{\"key\": \"value\",\"data\": {\"internalKey\": []}}");
+            Assert.AreEqual("{\n" +
+                            "    \"key\": \"value\",\n" +
+                            "    \"data\": {\n" +
+                            "        \"internalKey\": []\n" +
+                            "    }\n" +
+                            "}", json.ToString());
+        }
+
+        [TestMethod]
+        public void Test_ToString_JsonList()
+        {
+            json = new JSON("{\"key\": \"value\",\"data\": {\"internalKey\": [{\"key1\": 1}, {\"key2\": 2}, {\"key3\": 3}]}}");
+            Assert.AreEqual("{\n" +
+                            "    \"key\": \"value\",\n" +
+                            "    \"data\": {\n" +
+                            "        \"internalKey\": [\n" +
+                            "            {\n" +
+                            "                \"key1\": 1\n" +
+                            "            },\n" +
+                            "            {\n" +
+                            "                \"key2\": 2\n" +
+                            "            },\n" +
+                            "            {\n" +
+                            "                \"key3\": 3\n" +
+                            "            }\n" +
+                            "        ]\n" +
+                            "    }\n" +
+                            "}", json.ToString());
+        }
     }
 }

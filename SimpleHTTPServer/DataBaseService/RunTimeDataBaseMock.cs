@@ -57,7 +57,7 @@ namespace SimpleHTTPServer.DataBaseService
 
         public DatabaseReturn GetAllPatients()
         {
-            throw new NotImplementedException();
+            return new DatabaseReturn(DatabaseStatus.DB_OK, new List<InternalObject.Patient>(m_patientList));
         }
 
         public DatabaseReturn GetAllUser()
@@ -65,9 +65,17 @@ namespace SimpleHTTPServer.DataBaseService
             return new DatabaseReturn(DatabaseStatus.DB_OK, new List<InternalObject.User>(m_userList));
         }
 
-        public DatabaseReturn GetPatient(Patient patient)
+        public DatabaseReturn GetPatient(string patientId)
         {
-            throw new NotImplementedException();
+            foreach (var patient in m_patientList)
+            {
+                if (patient.patientId == patientId)
+                {
+                    return new DatabaseReturn(DatabaseStatus.DB_OK, new InternalObject.Patient(patient));
+                }
+            }
+
+            return new DatabaseReturn(DatabaseStatus.DB_OBJECT_NOT_FOUND, null);
         }
 
         public DatabaseReturn GetPetMedicalCard(PetMedicalCard petMedicalCard)

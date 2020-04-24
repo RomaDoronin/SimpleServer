@@ -10,7 +10,7 @@ namespace SimpleHTTPServer.Modules
     {
         // Validate
         // ---------------------------------------------------------
-        public override string[] GetRequiredFieldNames(string httpReqName)
+        public override string[] GetRequiredFieldNames(string httpReqName, string[] url)
         {
             switch (httpReqName)
             {

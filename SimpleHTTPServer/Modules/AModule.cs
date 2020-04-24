@@ -13,7 +13,7 @@ namespace SimpleHTTPServer.Modules
         public void Validate(Context context)
         {
             // Проверка на обязательные поля
-            string[] requiredFieldNames = GetRequiredFieldNames(context.contextRequest.httpReqName);
+            string[] requiredFieldNames = GetRequiredFieldNames(context.contextRequest.httpReqName, context.contextRequest.url);
             ValidateRequiredFieldExistAndNotEmpty(context, requiredFieldNames);
             if (context.contextResponse.statusCode != Constants.StatusCode.OK) { return; }
 
@@ -42,7 +42,7 @@ namespace SimpleHTTPServer.Modules
         }
 
         // Validate virtual methods
-        public virtual string[] GetRequiredFieldNames(string httpReqName)
+        public virtual string[] GetRequiredFieldNames(string httpReqName, string[] url)
         {
             return new string[] { };
         }

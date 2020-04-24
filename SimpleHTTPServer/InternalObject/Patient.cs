@@ -20,5 +20,13 @@ namespace SimpleHTTPServer.InternalObject
             secondname = string.Empty;
             petMedicalCardId = string.Empty;
         }
+
+        public Patient(Patient previousPatient)
+        {
+            patientId = previousPatient.patientId;
+            firstname = previousPatient.firstname;
+            secondname = previousPatient.secondname;
+            petMedicalCardId = previousPatient.petMedicalCardId;
+        }
     }
 }

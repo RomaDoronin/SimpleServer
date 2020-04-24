@@ -74,7 +74,7 @@ namespace SimpleHTTPServer
         }
 
         /// <summary>
-        /// "METHOD_NOT_ALLOWED" -> "Method not allowed"
+        /// "METHOD_NOT_ALLOWED" -> "Method Not Allowed"
         /// </summary>
         public static string ConstFormatToStringFormat(string str)
         {
@@ -83,11 +83,21 @@ namespace SimpleHTTPServer
                 return str;
             }
 
-            str = str.Replace('_', ' ');
-            char firstLetter = str[0];
-            str = str.Substring(1);
-            str = str.ToLower();
-            str = firstLetter + str;
+            var wordArr = str.Split(new char[] { '_' });
+            str = "";
+            foreach (var word in wordArr)
+            {
+                if (word == "")
+                {
+                    str += " ";
+                    continue;
+                }
+                char firstLetter = word[0];
+                string subWord = word.Substring(1).ToLower();
+                str += firstLetter + subWord + " ";
+            }
+
+            str = str.Remove(str.Length - 1);
 
             return str;
         }

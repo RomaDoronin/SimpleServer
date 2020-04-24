@@ -83,7 +83,7 @@ namespace SimpleHTTPServer.DataBaseService
         /// internalObject: Patient
         /// }
         /// </summary>
-        DatabaseReturn GetPatient(InternalObject.Patient patient);
+        DatabaseReturn GetPatient(string patientId);
         /// <summary>
         /// Return {
         /// status: DatabaseStatus,

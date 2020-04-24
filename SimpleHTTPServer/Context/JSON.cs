@@ -73,18 +73,25 @@ namespace SimpleHTTPServer
                     List<JSON> jsonList = (List<JSON>)list;
                     foreach (var val in jsonList)
                     {
-                        result += val + ",\n";
+                        result += val.ToString() + ",\n";
                     }
-                    result = result.Replace("\n", "\n    ");
-                    result = result.Remove(result.Length - 4, 4);
-                    result = "    " + result;
+                    if (result.Length > 0)
+                    {
+                        result = result.Replace("\n", "\n    ");
+                        result = result.Remove(result.Length - 4, 4);
+                        result = "    " + result;
+                    }
                     break;
                 default:
                     break;
             }
 
-            result = result.Remove(result.Length - 2, 2);
-            result = "[\n" + result + "\n]";
+            if (result.Length > 0)
+            {
+                result = result.Remove(result.Length - 2, 2);
+                result = "\n" + result + "\n";
+            }
+            result = "[" + result + "]";
             return result;
         }
 

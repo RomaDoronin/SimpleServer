@@ -145,15 +145,15 @@ namespace SimpleHTTPServerUnitTest
         [TestMethod]
         public void Test_ConstFormatToStringFormat_NormalCases()
         {
-            Assert.AreEqual("Test word", StrManualLib.ConstFormatToStringFormat("TEST_WORD"));
-            Assert.AreEqual("Test word s", StrManualLib.ConstFormatToStringFormat("TEST_WORD_S"));
-            Assert.AreEqual("Test word s many", StrManualLib.ConstFormatToStringFormat("TEST_WORD_S_MANY"));
+            Assert.AreEqual("Test Word", StrManualLib.ConstFormatToStringFormat("TEST_WORD"));
+            Assert.AreEqual("Test Word S", StrManualLib.ConstFormatToStringFormat("TEST_WORD_S"));
+            Assert.AreEqual("Test Word S Many", StrManualLib.ConstFormatToStringFormat("TEST_WORD_S_MANY"));
         }
 
         [TestMethod]
         public void Test_ConstFormatToStringFormat_ExtremeCases()
         {
-            Assert.AreEqual(" test word s many", StrManualLib.ConstFormatToStringFormat("_TEST_WORD_S_MANY"));
+            Assert.AreEqual(" Test Word S Many", StrManualLib.ConstFormatToStringFormat("_TEST_WORD_S_MANY"));
             Assert.AreEqual(" ", StrManualLib.ConstFormatToStringFormat("_"));
             Assert.AreEqual("dsaf asdf sadf", StrManualLib.ConstFormatToStringFormat("dsaf asdf sadf"));
             Assert.AreEqual("Dsaf asdf sadf", StrManualLib.ConstFormatToStringFormat("DSAF asdf sadf"));
